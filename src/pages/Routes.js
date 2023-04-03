@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import Login from './Login';
 import Meals from './Meals';
 import Drinks from './Drinks';
@@ -8,7 +8,8 @@ import DoneRecipes from './DoneRecipes';
 import FavoriteRecipes from './FavoriteRecipes';
 
 function Routes() {
-  <BrowserRouter>
+  return (
+
     <Switch>
       <Route exact path="/" component={ Login } />
       <Route exact path="/meals" component={ Meals } />
@@ -19,9 +20,9 @@ function Routes() {
       {/*       <Route exact path="" component={} />
       <Route exact path="" component={} />
       <Route exact path="" component={} />
-      <Route exact path="" component={} /> */}
+    <Route exact path="" component={} /> */}
     </Switch>
-  </BrowserRouter>;
+  );
 }
 
 export default Routes;

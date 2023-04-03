@@ -1,8 +1,9 @@
-/* import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
+// import { useMemo, useState } from 'react';
 import AppContext from './AppContext';
 
 function AppProvider({ children }) {
-  const values = {};
+  const values = 0;
 
   return (
     <AppContext.Provider value={ values }>
@@ -15,4 +16,4 @@ AppProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export default AppProvider; */
+export default AppProvider;
