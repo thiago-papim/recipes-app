@@ -12,13 +12,18 @@ export default function SearchBar() {
   const [inputRadio, setInputRadio] = useState('');
   const [inputSearch, setInputSearch] = useState('');
   const [localApi, setLocalApi] = useState('');
+  const [btnSearch, setBtnSearch] = useState(false);
 
   useEffect(() => {
     const magicNumber = 12;
     const result = localApi.meals?.slice(0, magicNumber);
-    setApi(result);
-    console.log(result);
-  }, [localApi, setApi]);
+    if (result?.length > 0) {
+      setApi(result);
+    }
+    if (!result && btnSearch) {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
+    }
+  }, [localApi, setApi, btnSearch]);
 
   const getApi = async () => {
     const pageName = pathname.includes('meals');
@@ -35,6 +40,7 @@ export default function SearchBar() {
   };
 
   const handleClick = () => {
+    setBtnSearch(true);
     getApi();
   };
 
@@ -47,7 +53,9 @@ export default function SearchBar() {
   };
 
   return (
-    <form>
+    <form
+      data-testid="search-input"
+    >
       <div>
         <input
           type="text"

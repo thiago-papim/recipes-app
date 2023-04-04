@@ -1,12 +1,12 @@
 import React from 'react';
 import Itens from '../components/Itens';
-import SearchBar from '../components/SearchBar';
 import Footer from '../components/Footer';
+import Header from '../components/Header';
 
 export default function Meals() {
   return (
     <>
-      <SearchBar />
+      <Header />
       <Itens />
       <Footer />
     </>
