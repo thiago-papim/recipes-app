@@ -56,12 +56,11 @@ export default function SearchBar() {
   };
 
   return (
-    <form
-      data-testid="search-input"
-    >
+    <form>
       <div>
         <input
           type="text"
+          data-testid="search-input"
           onChange={ handleChange }
         />
       </div>
