@@ -72,6 +72,7 @@ export default function SearchBar() {
     <form>
       <div>
         <input
+          placeholder="Pesquise sua receita..."
           type="text"
           data-testid="search-input"
           onChange={ handleChange }
