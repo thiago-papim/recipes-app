@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+
 import AppContext from '../context/AppContext';
 import { apiSearch } from '../services/API_SEARCH';
 
 export default function SearchBar() {
   const { setApi } = useContext(AppContext);
-  // const history = useHistory();
+  const history = useHistory();
 
   const location = useLocation();
   const { pathname } = location;
@@ -20,27 +21,39 @@ export default function SearchBar() {
     const validationApi = pageName ? 'meals' : 'drinks';
     const result = localApi[validationApi]?.slice(0, magicNumber);
     setApi(result);
-  }, [localApi, setApi, btnSearch]);
+  }, [localApi, setApi, btnSearch, pathname]);
+
+  const recipeApi = (recipeArr) => {
+    console.log(recipeArr);
+    // console.log(typeRecipe);
+    if (recipeArr.meals?.length > 1 || recipeArr.drinks?.length > 1) {
+      setLocalApi(recipeArr);
+    } else if (recipeArr.meals?.length === 1 || recipeArr.drinks?.length === 1) {
+      setApi(recipeArr);
+      const pageName = pathname.includes('meals');
+      const validationApi = pageName ? 'idMeal' : 'idDrink';
+      const id = recipeArr[pathname.slice(1)][0][validationApi];
+      history.push(`/${pathname.slice(1)}/${id}`);
+    } else {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
+    }
+  };
 
   const getApi = async () => {
     const pageName = pathname.includes('meals');
     const validationApi = pageName ? 'themealdb' : 'thecocktaildb';
     console.log(validationApi);
-    let teste = [];
+    let recipeArr = [];
     if (inputRadio === 'First letter' && inputSearch.length > 1) {
       global.alert('Your search must have only 1 (one) character');
     } else if (inputRadio === 'First letter' && inputSearch.length === 1) {
-      teste = await apiSearch(`https://www.${validationApi}.com/api/json/v1/1/search.php?f=${inputSearch}`);
+      recipeArr = await apiSearch(`https://www.${validationApi}.com/api/json/v1/1/search.php?f=${inputSearch}`);
     } else if (inputRadio === 'Name') {
-      teste = await apiSearch(`https://www.${validationApi}.com/api/json/v1/1/search.php?s=${inputSearch}`);
+      recipeArr = await apiSearch(`https://www.${validationApi}.com/api/json/v1/1/search.php?s=${inputSearch}`);
     } else {
-      teste = await apiSearch(`https://www.${validationApi}.com/api/json/v1/1/filter.php?i=${inputSearch}`);
+      recipeArr = await apiSearch(`https://www.${validationApi}.com/api/json/v1/1/filter.php?i=${inputSearch}`);
     }
-    if (teste.meals?.length > 0 || teste.drinks?.length > 0) {
-      setLocalApi(teste);
-    } else {
-      global.alert('Sorry, we haven\'t found any recipes for these filters.');
-    }
+    recipeApi(recipeArr);
   };
 
   const handleClick = () => {
@@ -60,6 +73,7 @@ export default function SearchBar() {
     <form>
       <div>
         <input
+          placeholder="Pesquise sua receita..."
           type="text"
           data-testid="search-input"
           onChange={ handleChange }
