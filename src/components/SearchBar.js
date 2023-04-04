@@ -17,25 +17,28 @@ export default function SearchBar() {
   useEffect(() => {
     const magicNumber = 12;
     const result = localApi.meals?.slice(0, magicNumber);
-    if (result?.length > 0) {
-      setApi(result);
-    }
-    if (!result && btnSearch) {
-      global.alert('Sorry, we haven\'t found any recipes for these filters.');
-    }
+    // console.log(result);
+    // if (result?.length > 0) {
+    setApi(result);
   }, [localApi, setApi, btnSearch]);
 
   const getApi = async () => {
     const pageName = pathname.includes('meals');
     const validationApi = pageName ? 'themealdb' : 'thecocktaildb';
+    let teste = [];
     if (inputRadio === 'First letter' && inputSearch.length > 1) {
       global.alert('Your search must have only 1 (one) character');
     } else if (inputRadio === 'First letter' && inputSearch.length === 1) {
-      setLocalApi(await apiSearch(`https://www.${validationApi}.com/api/json/v1/1/search.php?f=${inputSearch}`));
+      teste = await apiSearch(`https://www.${validationApi}.com/api/json/v1/1/search.php?f=${inputSearch}`);
     } else if (inputRadio === 'Name') {
-      setLocalApi(await apiSearch(`https://www.${validationApi}.com/api/json/v1/1/search.php?s=${inputSearch}`));
+      teste = await apiSearch(`https://www.${validationApi}.com/api/json/v1/1/search.php?s=${inputSearch}`);
     } else {
-      setLocalApi(await apiSearch(`https://www.${validationApi}.com/api/json/v1/1/filter.php?i=${inputSearch}`));
+      teste = await apiSearch(`https://www.${validationApi}.com/api/json/v1/1/filter.php?i=${inputSearch}`);
+    }
+    if (teste.meals?.length > 0) {
+      setLocalApi(teste);
+    } else {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
     }
   };
 
