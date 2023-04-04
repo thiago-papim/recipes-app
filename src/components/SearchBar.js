@@ -5,6 +5,7 @@ import { apiSearch } from '../services/API_SEARCH';
 
 export default function SearchBar() {
   const { setApi } = useContext(AppContext);
+  // const history = useHistory();
 
   const location = useLocation();
   const { pathname } = location;
@@ -15,8 +16,8 @@ export default function SearchBar() {
   useEffect(() => {
     const magicNumber = 12;
     const result = localApi.meals?.slice(0, magicNumber);
-    console.log(result);
     setApi(result);
+    console.log(result);
   }, [localApi, setApi]);
 
   const getApi = async () => {
@@ -35,7 +36,6 @@ export default function SearchBar() {
 
   const handleClick = () => {
     getApi();
-    // resultApi();
   };
 
   const handleChange = (e) => {

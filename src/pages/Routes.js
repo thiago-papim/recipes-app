@@ -6,6 +6,7 @@ import Drinks from './Drinks';
 import Profile from './Profile';
 import DoneRecipes from './DoneRecipes';
 import FavoriteRecipes from './FavoriteRecipes';
+import DetailsRecipe from './DetailsRecipe';
 
 function Routes() {
   return (
@@ -13,10 +14,13 @@ function Routes() {
     <Switch>
       <Route exact path="/" component={ Login } />
       <Route exact path="/meals" component={ Meals } />
+      <Route exact path="/meals:id" component={ DetailsRecipe } />
       <Route exact path="/drinks" component={ Drinks } />
+      <Route exact path="/drinks:id" component={ DetailsRecipe } />
       <Route exact path="/profile" component={ Profile } />
       <Route exact path="/done-recipes" component={ DoneRecipes } />
       <Route exact path="/favorite-recipes" component={ FavoriteRecipes } />
+
       {/*       <Route exact path="" component={} />
       <Route exact path="" component={} />
       <Route exact path="" component={} />
