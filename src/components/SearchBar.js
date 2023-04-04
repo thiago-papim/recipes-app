@@ -21,7 +21,7 @@ export default function SearchBar() {
     const validationApi = pageName ? 'meals' : 'drinks';
     const result = localApi[validationApi]?.slice(0, magicNumber);
     setApi(result);
-  }, [localApi, setApi, btnSearch]);
+  }, [localApi, setApi, btnSearch, pathname]);
 
   const recipeApi = (recipeArr) => {
     console.log(recipeArr);
