@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, act } from '@testing-library/react';
-// import userEvent from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 import Footer from '../components/Footer';
 import renderWithRouter from './renderWithRouter';
 import App from '../App';
@@ -21,5 +21,17 @@ describe('Testando o Footer', () => {
       history.push('/drinks');
     });
     expect(history.location.pathname).toBe('/drinks');
+  });
+  it('Testando se clicando no botão dr drinks, ele redireciona para a página de drinks', () => {
+    const { history } = renderWithRouter(<Footer />);
+    const drinkButton = screen.getByAltText('Ícone da bebida');
+    userEvent.click(drinkButton);
+    expect(history.location.pathname).toBe('/drinks');
+  });
+  it('', () => {
+    const { history } = renderWithRouter(<Footer />);
+    const mealButton = screen.getByAltText('Ícone da comida');
+    userEvent.click(mealButton);
+    expect(history.location.pathname).toBe('/meals');
   });
 });
