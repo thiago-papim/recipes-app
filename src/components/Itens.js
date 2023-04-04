@@ -8,15 +8,15 @@ export default function Itens() {
     <div>
       { api ? api.map((recipe, i) => (
         <div
-          key={ recipe.strMeal }
+          key={ recipe.strMeal || recipe.strDrink }
           data-testid={ `${i}-recipe-card` }
         >
           <img
             data-testid={ `${i}-card-img` }
-            src={ recipe.strMealThumb }
-            alt={ recipe.strMeal }
+            src={ recipe.strMealThumb || recipe.strDrinkThumb }
+            alt={ recipe.strMeal || recipe.strDrink }
           />
-          <h2 data-testid={ `${i}-card-name` }>{ recipe.strMeal }</h2>
+          <h2 data-testid={ `${i}-card-name` }>{ recipe.strMeal || recipe.strDrink }</h2>
         </div>
       )) : null }
     </div>

@@ -16,15 +16,16 @@ export default function SearchBar() {
 
   useEffect(() => {
     const magicNumber = 12;
-    const result = localApi.meals?.slice(0, magicNumber);
-    // console.log(result);
-    // if (result?.length > 0) {
+    const pageName = pathname.includes('meals');
+    const validationApi = pageName ? 'meals' : 'drinks';
+    const result = localApi[validationApi]?.slice(0, magicNumber);
     setApi(result);
   }, [localApi, setApi, btnSearch]);
 
   const getApi = async () => {
     const pageName = pathname.includes('meals');
     const validationApi = pageName ? 'themealdb' : 'thecocktaildb';
+    console.log(validationApi);
     let teste = [];
     if (inputRadio === 'First letter' && inputSearch.length > 1) {
       global.alert('Your search must have only 1 (one) character');
@@ -35,7 +36,7 @@ export default function SearchBar() {
     } else {
       teste = await apiSearch(`https://www.${validationApi}.com/api/json/v1/1/filter.php?i=${inputSearch}`);
     }
-    if (teste.meals?.length > 0) {
+    if (teste.meals?.length > 0 || teste.drinks?.length > 0) {
       setLocalApi(teste);
     } else {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
