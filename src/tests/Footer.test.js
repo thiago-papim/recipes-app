@@ -15,7 +15,7 @@ describe('Testando o Footer', () => {
     expect(mealIcon).toBeInTheDocument();
     expect(footerId).toBeInTheDocument();
   });
-  it('', () => {
+  it('Testando a rota drinks', () => {
     const { history } = renderWithRouter(<App />);
     act(() => {
       history.push('/drinks');
