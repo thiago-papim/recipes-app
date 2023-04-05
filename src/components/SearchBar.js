@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import AppContext from '../context/AppContext';
 import { apiSearch } from '../services/API_SEARCH';
-
 export default function SearchBar() {
   const { setApi } = useContext(AppContext);
   const history = useHistory();
@@ -18,10 +17,8 @@ export default function SearchBar() {
     const validationApi = pageName ? 'meals' : 'drinks';
     const result = localApi[validationApi]?.slice(0, magicNumber);
     setApi(result);
-  }, [localApi, setApi, btnSearch]);
+  }, [localApi, setApi, btnSearch, pathname]);
   const recipeApi = (recipeArr) => {
-    // console.log(recipeArr);
-    // console.log(typeRecipe);
     if (recipeArr.meals?.length > 1 || recipeArr.drinks?.length > 1) {
       setLocalApi(recipeArr);
     } else if (recipeArr.meals?.length === 1 || recipeArr.drinks?.length === 1) {
@@ -37,7 +34,7 @@ export default function SearchBar() {
   const getApi = async () => {
     const pageName = pathname.includes('meals');
     const validationApi = pageName ? 'themealdb' : 'thecocktaildb';
-    // console.log(validationApi);
+    console.log(validationApi);
     let recipeArr = [];
     if (inputRadio === 'First letter' && inputSearch.length > 1) {
       global.alert('Your search must have only 1 (one) character');
@@ -65,6 +62,7 @@ export default function SearchBar() {
     <form>
       <div>
         <input
+          placeholder="Pesquise sua receita..."
           type="text"
           data-testid="search-input"
           onChange={ handleChange }
