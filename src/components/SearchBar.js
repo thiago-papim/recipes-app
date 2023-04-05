@@ -24,8 +24,6 @@ export default function SearchBar() {
   }, [localApi, setApi, btnSearch, pathname]);
 
   const recipeApi = (recipeArr) => {
-    console.log(recipeArr);
-    // console.log(typeRecipe);
     if (recipeArr.meals?.length > 1 || recipeArr.drinks?.length > 1) {
       setLocalApi(recipeArr);
     } else if (recipeArr.meals?.length === 1 || recipeArr.drinks?.length === 1) {

@@ -1,0 +1,16 @@
+.divAllItens {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.divItens {
+  width: 300px;
+}
+
+.recipeImg {
+  background-color: aqua;
+  width: 200px;
+}
