@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
-// import AppContext from '../context/AppContext';
 
 function RecipeDetails(props) {
   const [details, setDetails] = useState([]);
