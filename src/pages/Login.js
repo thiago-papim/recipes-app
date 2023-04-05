@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 // import AppContext from '../context/AppContext';
 
 function Login() {
-  // const { email, setEmail } = useContext(AppContext);
   const history = useHistory();
   const [email, setEmail] = useState('');
   const [passWord, setPassWord] = useState('');
