@@ -31,7 +31,7 @@ function RecipeDetails(props) {
       };
       getDrink();
     }
-  }, []);
+  }, [id, type]);
   console.log(details);
 
   const pageName = pathname.includes('meals');

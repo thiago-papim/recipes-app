@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import AppContext from '../context/AppContext';
 import { apiSearch } from '../services/API_SEARCH';
+
 export default function SearchBar() {
   const { setApi } = useContext(AppContext);
   const history = useHistory();
