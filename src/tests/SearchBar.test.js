@@ -3,7 +3,6 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import renderWithRouter from './renderWithRouter';
-// import App from '../App';
 import AppProvider from '../context/AppProvider';
 import Routes from '../pages/Routes';
 
@@ -49,7 +48,5 @@ describe('Testando o SearchBar', () => {
     userEvent.click(radioName);
     userEvent.type(inputSearch, ('Apple Frangipan Tart'));
     userEvent.click(btnSubmit);
-
-    screen.logTestingPlaygroundURL();
   });
 });

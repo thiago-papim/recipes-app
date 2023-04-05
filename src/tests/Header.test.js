@@ -41,6 +41,6 @@ describe('Realizando testes do Header', () => {
     const profileButton = screen.getByAltText('perfilBtn');
     userEvent.click(profileButton);
     const buttons = screen.getAllByRole('button');
-    expect(buttons).toHaveLength(3);
+    expect(buttons).toHaveLength(6);
   });
 });
