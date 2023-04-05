@@ -12,7 +12,6 @@ function RecipeDetails(props) {
   const { pathname } = location;
   const urlAposDominio = pathname.split('/');
   const type = urlAposDominio[1];
-  // const id = urlAposDominio[2];
 
   useEffect(() => {
     if (type === 'meals') {
@@ -54,9 +53,6 @@ function RecipeDetails(props) {
             { checking ? details.strCategory : details.strAlcoholic }
           </h3>
           <h3>Ingredientes</h3>
-          {/* <ul>
-          {}
-          </ul> */}
         </div>
       )}
     </div>
