@@ -14,7 +14,6 @@ export default function Profile() {
     }
     history.push(page);
   };
-
   return (
     <div>
       <Header />
