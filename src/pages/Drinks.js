@@ -6,16 +6,17 @@ import AppContext from '../context/AppContext';
 import { apiSearch } from '../services/API_SEARCH';
 
 function Drinks() {
-  const { setApi } = useContext(AppContext);
+  const { setApi, setOriginalApi } = useContext(AppContext);
 
   useEffect(() => {
     async function fetchData() {
       const response = await apiSearch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
       const magicNumber = 12;
       setApi(response.drinks.slice(0, magicNumber));
+      setOriginalApi(response.drinks.slice(0, magicNumber));
     }
     fetchData();
-  }, [setApi]);
+  }, [setApi, setOriginalApi]);
 
   return (
     <div>

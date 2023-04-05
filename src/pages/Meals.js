@@ -6,16 +6,17 @@ import { apiSearch } from '../services/API_SEARCH';
 import AppContext from '../context/AppContext';
 
 export default function Meals() {
-  const { setApi } = useContext(AppContext);
+  const { setApi, setOriginalApi } = useContext(AppContext);
 
   useEffect(() => {
     async function fetchData() {
       const response = await apiSearch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
       const magicNumber = 12;
       setApi(response.meals.slice(0, magicNumber));
+      setOriginalApi(response.meals.slice(0, magicNumber));
     }
     fetchData();
-  }, [setApi]);
+  }, [setApi, setOriginalApi]);
 
   return (
     <>

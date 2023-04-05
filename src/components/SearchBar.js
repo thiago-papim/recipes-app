@@ -12,6 +12,7 @@ export default function SearchBar() {
   const [inputSearch, setInputSearch] = useState('');
   const [localApi, setLocalApi] = useState('');
   const [btnSearch, setBtnSearch] = useState(false);
+
   useEffect(() => {
     const magicNumber = 12;
     const pageName = pathname.includes('meals');
@@ -19,6 +20,7 @@ export default function SearchBar() {
     const result = localApi[validationApi]?.slice(0, magicNumber);
     setApi(result);
   }, [localApi, setApi, btnSearch, pathname]);
+
   const recipeApi = (recipeArr) => {
     if (recipeArr.meals?.length > 1 || recipeArr.drinks?.length > 1) {
       setLocalApi(recipeArr);
@@ -32,6 +34,7 @@ export default function SearchBar() {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
     }
   };
+
   const getApi = async () => {
     const pageName = pathname.includes('meals');
     const validationApi = pageName ? 'themealdb' : 'thecocktaildb';
@@ -48,10 +51,12 @@ export default function SearchBar() {
     }
     recipeApi(recipeArr);
   };
+
   const handleClick = () => {
     setBtnSearch(true);
     getApi();
   };
+
   const handleChange = (e) => {
     const { target: { value, type } } = e;
     if (type === 'radio') setInputRadio(value);
@@ -59,6 +64,7 @@ export default function SearchBar() {
       setInputSearch(value);
     }
   };
+
   return (
     <form>
       <div>
