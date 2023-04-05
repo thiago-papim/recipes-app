@@ -5,7 +5,7 @@ import Header from '../components/Header';
 
 export default function Profile() {
   const history = useHistory();
-  const user = JSON.parse(localStorage.getItem('user')).email;
+  const user = JSON.parse(localStorage.getItem('user'))?.email;
   console.log(user);
 
   const btn = (page) => {
@@ -14,14 +14,13 @@ export default function Profile() {
     }
     history.push(page);
   };
-
   return (
     <div>
       <Header />
       <h3
         data-testid="profile-email"
       >
-        {user}
+        {user || ''}
       </h3>
       <div>
         <button
