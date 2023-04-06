@@ -10,6 +10,11 @@
   width: 100%;
 }
 
+.startButton {
+  position: fixed;
+  bottom: 0px;
+}
+
 .carousel {
   max-width: 500px;
 }

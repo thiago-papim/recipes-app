@@ -182,6 +182,13 @@ function RecipeDetails(props) {
           }
         </Carousel>
       </div>
+      <button
+        className="startButton"
+        type="button"
+        data-testid="start-recipe-btn"
+      >
+        Começar receita
+      </button>
     </div>
   );
 }
