@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 function RecipeInProgress() {
   const [checkboxes, setCheckboxes] = useState({});
@@ -58,6 +58,14 @@ function RecipeInProgress() {
     dateModified: null,
   };
 
+  useEffect(() => {
+    if (localStorage.getItem('inProgressRecipes') === null) {
+      localStorage.setItem('inProgressRecipes', JSON.stringify([]));
+    } else {
+      setCheckboxes(JSON.parse(localStorage.getItem('inProgressRecipes')));
+    }
+  }, []);
+
   const data = Object.entries(recipe);
 
   const ingredients = [];
@@ -78,17 +86,19 @@ function RecipeInProgress() {
     const key = index + 1;
     const state = {};
     Object.keys(checkboxes).forEach((value) => { state[value] = checkboxes[value]; });
-    console.log(state);
     if (state[key]) {
       const newKey = {};
       newKey[key] = false;
       const result = Object.assign(state, newKey);
       setCheckboxes(result);
+      console.log(Object.values(result).some((e) => e === true));
+      localStorage.setItem('inProgressRecipes', JSON.stringify(result));
     } else {
       const newKey = {};
       newKey[key] = true;
       const result = Object.assign(state, newKey);
       setCheckboxes(result);
+      localStorage.setItem('inProgressRecipes', JSON.stringify(result));
     }
   };
 
@@ -104,7 +114,7 @@ function RecipeInProgress() {
       <button data-testid="favorite-btn" label="favorite">Favoritar</button>
       <p data-testid="recipe-category">{recipe.strCategory}</p>
 
-      {ingredients.map((string, index) => (
+      {ingredients.length > 0 && ingredients.map((string, index) => (
         <div
           key={ string }
         >
@@ -118,8 +128,7 @@ function RecipeInProgress() {
             <input
               label="step"
               type="checkbox"
-              defaultChecked={ false }
-              checked={ checkboxes[index + 1] }
+              defaultChecked={ checkboxes[index + 1] }
               onChange={ () => handleClick(index) }
             />
             {`${string} ${measures[index]}`}
