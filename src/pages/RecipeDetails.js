@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import '../App.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 function RecipeDetails(props) {
   const [details, setDetails] = useState([]);
   const [ingredients, setIngredients] = useState(null);
   const [recomendations, setRecomendations] = useState([]);
+  const history = useHistory();
   const { match: { params: { id } } } = props;
   const location = useLocation();
   const { pathname } = location;
@@ -106,6 +107,14 @@ function RecipeDetails(props) {
     return `${embedLink}${linkId}`;
   };
 
+  const handleClick = () => {
+    if (type === 'meals') {
+      history.push(`/meals/${id}/in-progress`);
+    } else {
+      history.push(`/drinks/${id}/in-progress`);
+    }
+  };
+
   console.log(details);
   return (
     <div>
@@ -186,8 +195,9 @@ function RecipeDetails(props) {
         className="startButton"
         type="button"
         data-testid="start-recipe-btn"
+        onClick={ handleClick }
       >
-        Começar receita
+        Start recipe
       </button>
     </div>
   );
