@@ -67,14 +67,14 @@ function RecipeDetails(props) {
       getFood().then((data) => {
         setDetails(data);
       });
-      getMealsRecomendations().then((data) => {
+      getDrinksRecomendations().then((data) => {
         setRecomendations(data);
       });
     } else {
       getDrink().then((data) => {
         setDetails(data);
       });
-      getDrinksRecomendations().then((data) => {
+      getMealsRecomendations().then((data) => {
         setRecomendations(data);
       });
     }
