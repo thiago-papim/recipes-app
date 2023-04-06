@@ -11,19 +11,21 @@ function RecipeDetails(props) {
   const { pathname } = location;
   const urlAposDominio = pathname.split('/');
   const type = urlAposDominio[1];
+  console.log(type);
 
   useEffect(() => {
     if (type === 'meals') {
       const getFood = async () => {
         const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
         const data = await response.json();
+        console.log(data);
         setDetails(data.meals);
       };
       const getMealsRecomendations = async () => {
         const response = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
         const data = await response.json();
         setRecomendations(data.meals);
-        console.log(recomendations);
+        // console.log(recomendations);
       };
       getFood();
       getMealsRecomendations();
@@ -31,13 +33,14 @@ function RecipeDetails(props) {
       const getDrink = async () => {
         const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
         const data = await response.json();
+        // console.log('entrei');
         setDetails(data.drinks);
       };
       const getDrinksRecomendations = async () => {
         const response = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
         const data = await response.json();
         setRecomendations(data.drinks);
-        console.log(recomendations);
+        // console.log(recomendations);
       };
       getDrink();
       getDrinksRecomendations();
@@ -45,11 +48,12 @@ function RecipeDetails(props) {
   }, [id, type, recomendations]);
 
   useEffect(() => {
+    console.log(details);
     if (details.length > 0) {
       const data = details[0];
       console.log(data);
       const allIngredients = Object.entries(data)
-        .filter((e) => e[0].includes('strIngredient') && e[1].length > 0)
+        .filter((e) => e[0].includes('strIngredient') && e[1])
         .map((e) => e[1]);
       console.log(allIngredients);
       const measures = Object.entries(data)
@@ -69,8 +73,7 @@ function RecipeDetails(props) {
     return `${embedLink}${linkId}`;
   };
 
-  const pageName = pathname.includes('meals');
-  const checking = pageName ? 'meals' : 'drinks';
+  console.log(details);
   return (
     <div>
       <h1>Detalhes da receita</h1>
@@ -78,14 +81,15 @@ function RecipeDetails(props) {
         <div>
           <img
             data-testid="recipe-photo"
-            src={ checking ? details[0]?.strMealThumb : details[0]?.strDrinkThumb }
+            src={ details[0]?.strMealThumb || details[0]?.strDrinkThumb }
             alt="Foto da receita"
+            style={ { width: '400px' } }
           />
           <h2 data-testid="recipe-title">
-            { checking ? details[0]?.strMeal : details[0]?.strDrink}
+            { details[0]?.strMeal || details[0]?.strDrink }
           </h2>
           <h3 data-testid="recipe-category">
-            { checking ? details[0]?.strCategory : details[0]?.strAlcoholic }
+            { type === 'meals' ? details[0].strCategory : details[0].strAlcoholic }
           </h3>
           <h3>Ingredientes</h3>
           {
