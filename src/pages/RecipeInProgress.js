@@ -1,69 +1,44 @@
 import React, { useEffect, useState } from 'react';
 
+import { apiSearch } from '../services/API_SEARCH';
+import FavoriteButton from '../components/FavoriteButton';
+
+const copy = require('clipboard-copy');
+
 function RecipeInProgress() {
   const [checkboxes, setCheckboxes] = useState({});
-  const recipe = {
-    idMeal: '52977',
-    strMeal: 'Corba',
-    strDrinkAlternate: null,
-    strCategory: 'Side',
-    strArea: 'Turkish',
-    strInstructions: 'Pick through your lentils for any foreign debris...',
-    strMealThumb: 'https://www.themealdb.com/images/media/meals/58oia61564916529.jpg',
-    strTags: 'Soup',
-    strYoutube: 'https://www.youtube.com/watch?v=VVnZd8A84z4',
-    strIngredient1: 'Lentils',
-    strIngredient2: 'Onion',
-    strIngredient3: 'Carrots',
-    strIngredient4: 'Tomato Puree',
-    strIngredient5: 'Cumin',
-    strIngredient6: 'Paprika',
-    strIngredient7: 'Mint',
-    strIngredient8: 'Thyme',
-    strIngredient9: 'Black Pepper',
-    strIngredient10: 'Red Pepper Flakes',
-    strIngredient11: 'Vegetable Stock',
-    strIngredient12: 'Water',
-    strIngredient13: 'Sea Salt',
-    strIngredient14: '',
-    strIngredient15: '',
-    strIngredient16: '',
-    strIngredient17: '',
-    strIngredient18: '',
-    strIngredient19: '',
-    strIngredient20: '',
-    strMeasure1: '1 cup ',
-    strMeasure2: '1 large',
-    strMeasure3: '1 large',
-    strMeasure4: '1 tbs',
-    strMeasure5: '2 tsp',
-    strMeasure6: '1 tsp ',
-    strMeasure7: '1/2 tsp',
-    strMeasure8: '1/2 tsp',
-    strMeasure9: '1/4 tsp',
-    strMeasure10: '1/4 tsp',
-    strMeasure11: '4 cups ',
-    strMeasure12: '1 cup ',
-    strMeasure13: 'Pinch',
-    strMeasure14: ' ',
-    strMeasure15: ' ',
-    strMeasure16: ' ',
-    strMeasure17: ' ',
-    strMeasure18: ' ',
-    strMeasure19: ' ',
-    strMeasure20: ' ',
-    strSource: 'https://findingtimeforcooking.com/main-dishes/red-lentil-soup-corba/',
-    strImageSource: null,
-    strCreativeCommonsConfirmed: null,
-    dateModified: null,
-  };
+  const [copied, setCopied] = useState(true);
+  // const [iconFavorite, setIconFavorite] = useState(false);
+  const [recipe, setRecipe] = useState({});
+  const [idRecipe, setIdRecipe] = useState('');
+  // const [btnFinish, setBtnFinish] = useState(true);
 
-  useEffect(() => {
+  const allStorage = () => {
     if (localStorage.getItem('inProgressRecipes') === null) {
       localStorage.setItem('inProgressRecipes', JSON.stringify([]));
     } else {
       setCheckboxes(JSON.parse(localStorage.getItem('inProgressRecipes')));
     }
+  };
+
+  useEffect(() => {
+    const url = window.location.href;
+    const name = url.includes('meals');
+    const id = url.match(/\/(\d+)\/in-progress/)[1];
+    setIdRecipe(id);
+    const fetchApi = async () => {
+      if (name) {
+        const response = await apiSearch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
+        setRecipe(response.meals[0]);
+      } else {
+        const response = await apiSearch(
+          `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`,
+        );
+        setRecipe(response.drinks[0]);
+      }
+    };
+    fetchApi();
+    allStorage();
   }, []);
 
   const data = Object.entries(recipe);
@@ -77,7 +52,7 @@ function RecipeInProgress() {
 
   const measures = [];
   data.forEach((array) => {
-    if (array[0].includes('strMeasure') && array[1].length > 2) {
+    if (array[0].includes('strMeasure') && array[1]?.length > 2) {
       return measures.push(array[1]);
     }
   });
@@ -91,7 +66,6 @@ function RecipeInProgress() {
       newKey[key] = false;
       const result = Object.assign(state, newKey);
       setCheckboxes(result);
-      console.log(Object.values(result).some((e) => e === true));
       localStorage.setItem('inProgressRecipes', JSON.stringify(result));
     } else {
       const newKey = {};
@@ -100,18 +74,29 @@ function RecipeInProgress() {
       setCheckboxes(result);
       localStorage.setItem('inProgressRecipes', JSON.stringify(result));
     }
+    allStorage();
   };
 
   return (
     <>
       <img
         data-testid="recipe-photo"
-        src={ recipe.strMealThumb }
-        alt={ recipe.strMeal }
+        src={ recipe.strMealThumb || recipe.strDrinkThumb }
+        alt={ recipe.strMeal || recipe.strDrink }
       />
-      <h2 data-testid="recipe-title">{recipe.strMeal}</h2>
-      <button data-testid="share-btn">Compartilhar</button>
-      <button data-testid="favorite-btn" label="favorite">Favoritar</button>
+      <h2 data-testid="recipe-title">{recipe.strMeal || recipe.strDrink}</h2>
+      <button
+        data-testid="share-btn"
+        onClick={ () => {
+          const magicNumber = -12;
+          copy(window.location.href.slice(0, magicNumber));
+          setCopied(false);
+        } }
+      >
+        Compartilhar
+      </button>
+      { idRecipe ? <FavoriteButton idRecipe={ idRecipe } recipe={ recipe } /> : ''}
+      { copied || <p>Link copied!</p> }
       <p data-testid="recipe-category">{recipe.strCategory}</p>
 
       {ingredients.length > 0 && ingredients.map((string, index) => (
@@ -128,16 +113,22 @@ function RecipeInProgress() {
             <input
               label="step"
               type="checkbox"
-              defaultChecked={ checkboxes[index + 1] }
+              // defaultChecked={ checkboxes[index + 1] }
+              checked={ checkboxes[index + 1] }
               onChange={ () => handleClick(index) }
             />
-            {`${string} ${measures[index]}`}
+            {`${string} ${measures[index] || ''}`}
           </label>
           <br />
         </div>
       ))}
       <p data-testid="instructions">{recipe.strInstructions}</p>
-      <button data-testid="finish-recipe-btn">Finalizar Receita</button>
+      <button
+        data-testid="finish-recipe-btn"
+        // disabled={ btnFinish }
+      >
+        Finalizar Receita
+      </button>
     </>
   );
 }

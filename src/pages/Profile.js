@@ -20,7 +20,7 @@ export default function Profile() {
       <h3
         data-testid="profile-email"
       >
-        {user || ''}
+        {user}
       </h3>
       <div>
         <button
