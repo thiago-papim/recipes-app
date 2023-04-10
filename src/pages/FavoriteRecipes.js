@@ -23,8 +23,8 @@ function FavoriteRecipes() {
     image: 'https://www.thecocktaildb.com/images/media/drink/2x8thr1504816928.jpg',
   }];
 
-  const [copied, setCopied] = useState(mockLocalStorage.map(() => false));
-  console.log(copied);
+  const [recipes, setRecipes] = useState(mockLocalStorage);
+  const [copied, setCopied] = useState(recipes.map(() => false));
 
   const copyLink = (id, type, index) => {
     clipboardCopy(`http://localhost:3000/${type}s/${id}`);
@@ -35,6 +35,13 @@ function FavoriteRecipes() {
     setCopied(newCopied);
   };
 
+  const handleClick = (index) => {
+    const newArray = [];
+    recipes.map((obj) => newArray.push(obj));
+    newArray.splice(index, 1);
+    setRecipes(newArray);
+  };
+
   return (
     <div>
       <Header />
@@ -42,7 +49,7 @@ function FavoriteRecipes() {
       <button data-testid="filter-by-meal-btn">Meals</button>
       <button data-testid="filter-by-drink-btn">Drinks</button>
 
-      {mockLocalStorage.map((recipe, index) => (
+      {recipes.map((recipe, index) => (
         <div key={ recipe.name }>
           <img
             data-testid={ `${index}-horizontal-image` }
@@ -68,6 +75,7 @@ function FavoriteRecipes() {
           {copied[index] && <p>Link copied!</p>}
           <button
             data-testid={ `${index}-horizontal-favorite-btn` }
+            onClick={ () => handleClick(index) }
           >
             <img src={ blackHeartIcon } alt="black-heart-icon" />
           </button>
