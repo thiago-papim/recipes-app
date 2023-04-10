@@ -7,7 +7,7 @@ import Profile from './Profile';
 import DoneRecipes from './DoneRecipes';
 import FavoriteRecipes from './FavoriteRecipes';
 import RecipeDetails from './RecipeDetails';
-import RecipeInProgress from '../components/RecipeInProgress';
+import RecipeInProgress from './RecipeInProgress';
 
 function Routes() {
   return (
