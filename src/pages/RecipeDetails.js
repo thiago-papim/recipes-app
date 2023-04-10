@@ -18,7 +18,6 @@ function RecipeDetails(props) {
   const { pathname } = location;
   const urlAposDominio = pathname.split('/');
   const type = urlAposDominio[1];
-  console.log(type);
 
   /*   const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
