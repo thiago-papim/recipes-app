@@ -79,7 +79,7 @@ function RecipeDetails(props) {
         setRecomendations(data);
       });
     }
-  }, []);
+  });
 
   useEffect(() => {
     console.log(details);
