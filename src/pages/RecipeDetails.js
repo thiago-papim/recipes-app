@@ -12,6 +12,7 @@ function RecipeDetails(props) {
   const [ingredients, setIngredients] = useState(null);
   const [recomendations, setRecomendations] = useState([]);
   const [copied, setCopied] = useState(false);
+  const [inProgressRecipe, setInProgressRecipe] = useState(false);
   const history = useHistory();
   const { match: { params: { id } } } = props;
   const location = useLocation();
@@ -123,6 +124,18 @@ function RecipeDetails(props) {
     setCopied(true);
   };
 
+  useEffect(() => {
+    const currentPath = () => {
+      if (pathname.includes('meals')) return 'meals';
+      return 'drinks';
+    };
+    const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes')) || {};
+    if (inProgressRecipes[currentPath()]
+      && Object.keys(inProgressRecipes[currentPath()]).includes(id)) {
+      setInProgressRecipe(true);
+    }
+  }, [id, pathname]);
+
   return (
     <div>
       <h1>Detalhes da receita</h1>
@@ -208,14 +221,16 @@ function RecipeDetails(props) {
           }
         </Carousel>
       </div>
-      <button
-        className="startButton"
-        type="button"
-        data-testid="start-recipe-btn"
-        onClick={ handleClick }
-      >
-        Start recipe
-      </button>
+      <div>
+        <button
+          className="startButton"
+          type="button"
+          data-testid="start-recipe-btn"
+          onClick={ handleClick }
+        >
+          { inProgressRecipe ? 'Continue Recipe' : 'Start Recipe' }
+        </button>
+      </div>
     </div>
   );
 }

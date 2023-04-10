@@ -13,10 +13,12 @@
 .startButton {
   bottom: 0;
   position: fixed;
+  padding: 30px;
+  margin-top: 30px;
 }
 
 .carousel {
-  max-width: 500px;
+  max-width: 300px;
 }
 
 .rocksGlass {
