@@ -10,6 +10,15 @@
   width: 100%;
 }
 
+.startButton {
+  bottom: 0;
+  position: fixed;
+}
+
+.carousel {
+  max-width: 500px;
+}
+
 .rocksGlass {
   animation: shake 1s infinite ease;
   max-height: 80vh;

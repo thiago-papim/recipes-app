@@ -11,7 +11,6 @@ import RecipeInProgress from './RecipeInProgress';
 
 function Routes() {
   return (
-
     <Switch>
       <Route exact path="/" component={ Login } />
       <Route exact path="/meals/:id" component={ RecipeDetails } />
