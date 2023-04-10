@@ -23,11 +23,16 @@ function FavoriteRecipes() {
     image: 'https://www.thecocktaildb.com/images/media/drink/2x8thr1504816928.jpg',
   }];
 
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState(mockLocalStorage.map(() => false));
+  console.log(copied);
 
-  const copyLink = (id, type) => {
+  const copyLink = (id, type, index) => {
     clipboardCopy(`http://localhost:3000/${type}s/${id}`);
-    setCopied(true);
+    const oldCopied = copied;
+    const newCopied = [];
+    oldCopied.forEach((bool) => newCopied.push(bool));
+    newCopied[index] = true;
+    setCopied(newCopied);
   };
 
   return (
@@ -56,11 +61,11 @@ function FavoriteRecipes() {
           </p>
           <button
             data-testid={ `${index}-horizontal-share-btn` }
-            onClick={ () => copyLink(recipe.id, recipe.type) }
+            onClick={ () => copyLink(recipe.id, recipe.type, index) }
           >
             <img src={ shareIcon } alt="share-icon" />
           </button>
-          {copied && <p>Link copied!</p>}
+          {copied[index] && <p>Link copied!</p>}
           <button
             data-testid={ `${index}-horizontal-favorite-btn` }
           >
