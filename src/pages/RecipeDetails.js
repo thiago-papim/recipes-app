@@ -3,6 +3,7 @@ import Carousel from 'react-bootstrap/Carousel';
 import '../App.css';
 import { useLocation, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import clipboardCopy from 'clipboard-copy';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 
@@ -10,6 +11,7 @@ function RecipeDetails(props) {
   const [details, setDetails] = useState([]);
   const [ingredients, setIngredients] = useState(null);
   const [recomendations, setRecomendations] = useState([]);
+  const [copied, setCopied] = useState(false);
   const history = useHistory();
   const { match: { params: { id } } } = props;
   const location = useLocation();
@@ -117,7 +119,11 @@ function RecipeDetails(props) {
     }
   };
 
-  console.log(details);
+  const copyLink = () => {
+    clipboardCopy(`http://localhost:3000${history.location.pathname}`);
+    setCopied(true);
+  };
+
   return (
     <div>
       <h1>Detalhes da receita</h1>
@@ -132,9 +138,13 @@ function RecipeDetails(props) {
           <h2 data-testid="recipe-title">
             { details[0]?.strMeal || details[0]?.strDrink }
           </h2>
-          <button data-testid="share-btn">
-            <img src={ shareIcon } alt="Botão de compartilhar" />
+          <button
+            data-testid="share-btn"
+            onClick={ copyLink }
+          >
+            <img src={ shareIcon } alt="Compartilhar" />
           </button>
+          {copied && <p>Link copied!</p>}
           <button data-testid="favorite-btn">
             <img src={ whiteHeartIcon } alt="Botão de favoritar" />
           </button>
