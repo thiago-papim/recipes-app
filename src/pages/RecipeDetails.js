@@ -3,6 +3,8 @@ import Carousel from 'react-bootstrap/Carousel';
 import '../App.css';
 import { useLocation, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import shareIcon from '../images/shareIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 
 function RecipeDetails(props) {
   const [details, setDetails] = useState([]);
@@ -130,6 +132,12 @@ function RecipeDetails(props) {
           <h2 data-testid="recipe-title">
             { details[0]?.strMeal || details[0]?.strDrink }
           </h2>
+          <button data-testid="share-btn">
+            <img src={ shareIcon } alt="Botão de compartilhar" />
+          </button>
+          <button data-testid="favorite-btn">
+            <img src={ whiteHeartIcon } alt="Botão de favoritar" />
+          </button>
           <h3 data-testid="recipe-category">
             { type === 'meals' ? details[0].strCategory : details[0].strAlcoholic }
           </h3>
