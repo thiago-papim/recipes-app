@@ -24,6 +24,8 @@ function FavoriteRecipes() {
   }];
 
   const [recipes, setRecipes] = useState(mockLocalStorage);
+  const [filteredRecipes, setFilteredRecipes] = useState(mockLocalStorage);
+  const [filterType, setFilterType] = useState('all');
   const [copied, setCopied] = useState(recipes.map(() => false));
 
   const copyLink = (id, type, index) => {
@@ -35,21 +37,78 @@ function FavoriteRecipes() {
     setCopied(newCopied);
   };
 
-  const handleClick = (index) => {
+  const resetFilter = (recipesList) => {
+    setFilteredRecipes(recipesList);
+    setFilterType('all');
+  };
+
+  const filterByMeal = (recipesList) => {
     const newArray = [];
-    recipes.map((obj) => newArray.push(obj));
-    newArray.splice(index, 1);
+    recipesList.map((obj) => {
+      if (obj.type === 'meal') {
+        newArray.push(obj);
+      }
+
+      setFilteredRecipes(newArray);
+      setFilterType('meal');
+
+      return newArray;
+    });
+  };
+
+  const filterByDrink = (recipesList) => {
+    const newArray = [];
+    recipesList.map((obj) => {
+      if (obj.type === 'drink') {
+        newArray.push(obj);
+      }
+
+      setFilteredRecipes(newArray);
+      setFilterType('drink');
+
+      return newArray;
+    });
+  };
+
+  const removeFavorite = (name) => {
+    // const newArray = [];
+    // recipes.map((obj) => newArray.push(obj));
+    const newArray = recipes.filter((recipe) => recipe.name !== name);
+    console.log(newArray);
     setRecipes(newArray);
+
+    if (filterType === 'meal') {
+      filterByMeal(newArray);
+    } else if (filterType === 'drink') {
+      filterByDrink(newArray);
+    } else {
+      resetFilter(newArray);
+    }
   };
 
   return (
     <div>
       <Header />
-      <button data-testid="filter-by-all-btn">All</button>
-      <button data-testid="filter-by-meal-btn">Meals</button>
-      <button data-testid="filter-by-drink-btn">Drinks</button>
+      <button
+        data-testid="filter-by-all-btn"
+        onClick={ () => resetFilter(recipes) }
+      >
+        All
+      </button>
+      <button
+        data-testid="filter-by-meal-btn"
+        onClick={ () => filterByMeal(recipes) }
+      >
+        Meals
+      </button>
+      <button
+        data-testid="filter-by-drink-btn"
+        onClick={ () => filterByDrink(recipes) }
+      >
+        Drinks
+      </button>
 
-      {recipes.map((recipe, index) => (
+      {filteredRecipes.map((recipe, index) => (
         <div key={ recipe.name }>
           <img
             data-testid={ `${index}-horizontal-image` }
@@ -75,7 +134,7 @@ function FavoriteRecipes() {
           {copied[index] && <p>Link copied!</p>}
           <button
             data-testid={ `${index}-horizontal-favorite-btn` }
-            onClick={ () => handleClick(index) }
+            onClick={ () => removeFavorite(recipe.name) }
           >
             <img src={ blackHeartIcon } alt="black-heart-icon" />
           </button>
