@@ -5,7 +5,8 @@ import { useLocation, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import clipboardCopy from 'clipboard-copy';
 import shareIcon from '../images/shareIcon.svg';
-import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+// import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import FavoriteButton from '../components/FavoriteButton';
 
 function RecipeDetails(props) {
   const [details, setDetails] = useState([]);
@@ -67,7 +68,7 @@ function RecipeDetails(props) {
      console.log(recomendations); */
   };
 
-  useEffect(() => {
+  const teste = () => {
     if (type === 'meals') {
       getFood().then((data) => {
         setDetails(data);
@@ -83,6 +84,10 @@ function RecipeDetails(props) {
         setRecomendations(data);
       });
     }
+  };
+
+  useEffect(() => {
+    teste();
   });
 
   useEffect(() => {
@@ -135,7 +140,7 @@ function RecipeDetails(props) {
       setInProgressRecipe(true);
     }
   }, [id, pathname]);
-
+  console.log(details);
   return (
     <div>
       <h1>Detalhes da receita</h1>
@@ -157,9 +162,10 @@ function RecipeDetails(props) {
             <img src={ shareIcon } alt="Compartilhar" />
           </button>
           {copied && <p>Link copied!</p>}
-          <button data-testid="favorite-btn">
+          {/* <button data-testid="favorite-btn">
             <img src={ whiteHeartIcon } alt="Botão de favoritar" />
-          </button>
+          </button> */}
+          { details ? <FavoriteButton idRecipe={ id } recipe={ details } /> : ''}
           <h3 data-testid="recipe-category">
             { type === 'meals' ? details[0].strCategory : details[0].strAlcoholic }
           </h3>
