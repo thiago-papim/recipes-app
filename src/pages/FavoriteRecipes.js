@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import clipboardCopy from 'clipboard-copy';
+import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
@@ -27,6 +28,7 @@ function FavoriteRecipes() {
   const [filteredRecipes, setFilteredRecipes] = useState(mockLocalStorage);
   const [filterType, setFilterType] = useState('all');
   const [copied, setCopied] = useState(recipes.map(() => false));
+  const history = useHistory();
 
   const copyLink = (id, type, index) => {
     clipboardCopy(`http://localhost:3000/${type}s/${id}`);
@@ -71,10 +73,7 @@ function FavoriteRecipes() {
   };
 
   const removeFavorite = (name) => {
-    // const newArray = [];
-    // recipes.map((obj) => newArray.push(obj));
     const newArray = recipes.filter((recipe) => recipe.name !== name);
-    console.log(newArray);
     setRecipes(newArray);
 
     if (filterType === 'meal') {
@@ -84,6 +83,10 @@ function FavoriteRecipes() {
     } else {
       resetFilter(newArray);
     }
+  };
+
+  const toDetails = (type, id) => {
+    history.push(`/${type}s/${id}`);
   };
 
   return (
@@ -110,11 +113,14 @@ function FavoriteRecipes() {
 
       {filteredRecipes.map((recipe, index) => (
         <div key={ recipe.name }>
-          <img
-            data-testid={ `${index}-horizontal-image` }
-            src={ recipe.image }
-            alt={ recipe.name }
-          />
+          <button onClick={ () => toDetails(recipe.type, recipe.id) }>
+            <img
+              data-testid={ `${index}-horizontal-image` }
+              src={ recipe.image }
+              alt={ recipe.name }
+              // onClick={ () => toDetails(recipe.type, recipe.id) }
+            />
+          </button>
           <p
             data-testid={ `${index}-horizontal-top-text` }
           >
@@ -122,9 +128,14 @@ function FavoriteRecipes() {
               ? `${recipe.nationality} - ${recipe.category}`
               : `${recipe.alcoholicOrNot}`}
           </p>
-          <p data-testid={ `${index}-horizontal-name` }>
-            {recipe.name}
-          </p>
+          <button onClick={ () => toDetails(recipe.type, recipe.id) }>
+            <h2
+              data-testid={ `${index}-horizontal-name` }
+              // onClick={ () => toDetails(recipe.type, recipe.id) }
+            >
+              {recipe.name}
+            </h2>
+          </button>
           <button
             data-testid={ `${index}-horizontal-share-btn` }
             onClick={ () => copyLink(recipe.id, recipe.type, index) }
