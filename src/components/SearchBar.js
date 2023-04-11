@@ -36,8 +36,8 @@ export default function SearchBar() {
   };
 
   const getApi = async () => {
-    const pageName = pathname.includes('meals');
-    const validationApi = pageName ? 'themealdb' : 'thecocktaildb';
+    const pageName = pathname.includes('drinks');
+    const validationApi = pageName ? 'thecocktaildb' : 'themealdb';
     console.log(validationApi);
     let recipeArr = [];
     if (inputRadio === 'First letter' && inputSearch.length > 1) {
