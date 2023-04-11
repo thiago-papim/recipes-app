@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import clipboardCopy from 'clipboard-copy';
 import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
@@ -6,29 +6,18 @@ import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 function FavoriteRecipes() {
-  const mockLocalStorage = [{
-    id: '53060',
-    type: 'meal',
-    nationality: 'Croatian',
-    category: 'Side',
-    alcoholicOrNot: '',
-    name: 'Burek',
-    image: 'https://www.themealdb.com/images/media/meals/tkxquw1628771028.jpg',
-  }, {
-    id: '17222',
-    type: 'drink',
-    nationality: '',
-    category: 'Cocktail',
-    alcoholicOrNot: 'Alcoholic',
-    name: 'A1',
-    image: 'https://www.thecocktaildb.com/images/media/drink/2x8thr1504816928.jpg',
-  }];
-
-  const [recipes, setRecipes] = useState(mockLocalStorage);
-  const [filteredRecipes, setFilteredRecipes] = useState(mockLocalStorage);
+  const [recipes, setRecipes] = useState([]);
+  const [filteredRecipes, setFilteredRecipes] = useState([]);
   const [filterType, setFilterType] = useState('all');
-  const [copied, setCopied] = useState(recipes.map(() => false));
+  const [copied, setCopied] = useState([]);
   const history = useHistory();
+
+  useEffect(() => {
+    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    setRecipes(favoriteRecipes);
+    setFilteredRecipes(favoriteRecipes);
+    setCopied(favoriteRecipes ? favoriteRecipes.map(() => false) : []);
+  }, []);
 
   const copyLink = (id, type, index) => {
     clipboardCopy(`http://localhost:3000/${type}s/${id}`);
@@ -75,6 +64,7 @@ function FavoriteRecipes() {
   const removeFavorite = (name) => {
     const newArray = recipes.filter((recipe) => recipe.name !== name);
     setRecipes(newArray);
+    localStorage.setItem('favoriteRecipes', JSON.stringify(newArray));
 
     if (filterType === 'meal') {
       filterByMeal(newArray);
@@ -111,14 +101,14 @@ function FavoriteRecipes() {
         Drinks
       </button>
 
-      {filteredRecipes.map((recipe, index) => (
+      {filteredRecipes ? filteredRecipes.map((recipe, index) => (
         <div key={ recipe.name }>
           <button onClick={ () => toDetails(recipe.type, recipe.id) }>
             <img
               data-testid={ `${index}-horizontal-image` }
               src={ recipe.image }
+              width="300"
               alt={ recipe.name }
-              // onClick={ () => toDetails(recipe.type, recipe.id) }
             />
           </button>
           <p
@@ -131,26 +121,31 @@ function FavoriteRecipes() {
           <button onClick={ () => toDetails(recipe.type, recipe.id) }>
             <h2
               data-testid={ `${index}-horizontal-name` }
-              // onClick={ () => toDetails(recipe.type, recipe.id) }
             >
               {recipe.name}
             </h2>
           </button>
           <button
-            data-testid={ `${index}-horizontal-share-btn` }
             onClick={ () => copyLink(recipe.id, recipe.type, index) }
           >
-            <img src={ shareIcon } alt="share-icon" />
+            <img
+              data-testid={ `${index}-horizontal-share-btn` }
+              src={ shareIcon }
+              alt="share-icon"
+            />
           </button>
           {copied[index] && <p>Link copied!</p>}
           <button
-            data-testid={ `${index}-horizontal-favorite-btn` }
             onClick={ () => removeFavorite(recipe.name) }
           >
-            <img src={ blackHeartIcon } alt="black-heart-icon" />
+            <img
+              data-testid={ `${index}-horizontal-favorite-btn` }
+              src={ blackHeartIcon }
+              alt="black-heart-icon"
+            />
           </button>
         </div>
-      ))}
+      )) : <p />}
 
     </div>
 
