@@ -88,7 +88,7 @@ function RecipeDetails(props) {
 
   useEffect(() => {
     teste();
-  }, []);
+  });
 
   useEffect(() => {
     console.log(details);
