@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
 import renderWithRouter from './renderWithRouter';
@@ -42,6 +42,7 @@ describe('Testando Recipe in Progress', () => {
     userEvent.click(btnFinish);
   });
   it('Testando botão compartilhar', async () => {
+    window.document.execCommand = jest.fn(() => true);
     const btnStart = screen.getByRole('button', { name: /continue recipe/i });
     userEvent.click(btnStart);
     await waitFor(() => {
@@ -49,6 +50,7 @@ describe('Testando Recipe in Progress', () => {
     });
     const btnShare = screen.getByRole('button', { name: /compartilhar/i });
     console.log(btnShare);
+    fireEvent.click(btnShare);
   });
 });
 
@@ -90,5 +92,42 @@ describe('Testando Recipe in Progress em Drinks', () => {
     });
     expect(btnFinish).not.toBeDisabled();
     userEvent.click(btnFinish);
+    console.log(JSON.parse(localStorage.getItem('doneRecipes')));
+  });
+  it('Testando localStorage caso já tenha a receita', async () => {
+    localStorage.setItem('doneRecipes', JSON.stringify([{
+      id: '17222',
+      type: 'drink',
+      nationality: '',
+      category: 'Cocktail',
+      alcoholicOrNot: 'Alcoholic',
+      tags: [],
+      name: 'A1',
+      doneDate: '2023-04-12T15:00:16.529Z',
+      image: 'https://www.thecocktaildb.com/images/media/drink/2x8thr1504816928.jpg',
+    }]));
+    const btnStart = screen.getByRole('button', { name: /continue recipe/i });
+    userEvent.click(btnStart);
+    await waitFor(() => {
+      expect(screen.getAllByRole('checkbox'));
+    });
+    const btnFinish = screen.getByRole('button', { name: /finalizar receita/i });
+    expect(btnFinish).toBeDisabled();
+    const checkboxes = screen.getAllByRole('checkbox');
+    userEvent.click(checkboxes[0]);
+    userEvent.click(checkboxes[0]);
+    expect(btnFinish).not.toBeDisabled();
+    userEvent.click(btnFinish);
+  });
+  it('Testando checkbox Marcar e Desmarcar', async () => {
+    localStorage.clear();
+    const btnStart = screen.getByRole('button', { name: /continue recipe/i });
+    userEvent.click(btnStart);
+    await waitFor(() => {
+      expect(screen.getAllByRole('checkbox'));
+    });
+    const checkboxes = screen.getAllByRole('checkbox');
+    userEvent.click(checkboxes[0]);
+    userEvent.click(checkboxes[0]);
   });
 });

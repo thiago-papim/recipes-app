@@ -113,6 +113,7 @@ function RecipeInProgress() {
       };
       setCheckboxes(storage);
     } else if (!check) {
+      console.log('else if');
       storage[type] = {
         ...storage[type],
         [id]: arrString.filter((element) => element !== string),
