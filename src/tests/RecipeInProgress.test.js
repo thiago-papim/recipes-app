@@ -49,7 +49,6 @@ describe('Testando Recipe in Progress', () => {
       expect(screen.getAllByRole('checkbox'));
     });
     const btnShare = screen.getByRole('button', { name: /compartilhar/i });
-    console.log(btnShare);
     fireEvent.click(btnShare);
   });
 });
@@ -92,7 +91,6 @@ describe('Testando Recipe in Progress em Drinks', () => {
     });
     expect(btnFinish).not.toBeDisabled();
     userEvent.click(btnFinish);
-    console.log(JSON.parse(localStorage.getItem('doneRecipes')));
   });
   it('Testando localStorage caso já tenha a receita', async () => {
     localStorage.setItem('doneRecipes', JSON.stringify([{

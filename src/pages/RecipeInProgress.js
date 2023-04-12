@@ -73,7 +73,6 @@ function RecipeInProgress() {
     const validationRecipe = doneRecipes?.some((e) => e.id === id);
     const tags = recipe.strTags ? (recipe.strTags).split(',') : [];
     const doneDate = new Date();
-    console.log(doneDate);
     const objRecipe = {
       id,
       type: recipe.idDrink ? 'drink' : 'meal',
@@ -113,7 +112,6 @@ function RecipeInProgress() {
       };
       setCheckboxes(storage);
     } else if (!check) {
-      console.log('else if');
       storage[type] = {
         ...storage[type],
         [id]: arrString.filter((element) => element !== string),
