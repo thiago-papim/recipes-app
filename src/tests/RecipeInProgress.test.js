@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
 import renderWithRouter from './renderWithRouter';
@@ -48,6 +48,7 @@ describe('Testando Recipe in Progress', () => {
       expect(screen.getAllByRole('checkbox'));
     });
     const btnShare = screen.getByRole('button', { name: /compartilhar/i });
+    console.log(btnShare);
   });
 });
 
