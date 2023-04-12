@@ -21,9 +21,9 @@ function RecipeInProgress() {
     } else {
       setCheckboxes(JSON.parse(localStorage.getItem('inProgressRecipes')));
     }
-    const url = window.location.href;
+    const url = history.location.pathname;
     const name = url.includes('meals');
-    const id = url.match(/\/(\d+)\/in-progress/)[1];
+    const id = url.split('/')[2];
     setIdRecipe(id);
     const fetchApi = async () => {
       if (name) {
@@ -37,7 +37,7 @@ function RecipeInProgress() {
       }
     };
     fetchApi();
-  }, []);
+  }, [history]);
 
   const data = Object.entries(recipe);
 
@@ -73,7 +73,6 @@ function RecipeInProgress() {
     const validationRecipe = doneRecipes?.some((e) => e.id === id);
     const tags = recipe.strTags ? (recipe.strTags).split(',') : [];
     const doneDate = new Date();
-    console.log(doneDate);
     const objRecipe = {
       id,
       type: recipe.idDrink ? 'drink' : 'meal',

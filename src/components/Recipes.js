@@ -5,7 +5,7 @@ import AppContext from '../context/AppContext';
 import { apiSearch } from '../services/API_SEARCH';
 import './styles/itens.css';
 
-export default function Itens() {
+export default function Recipes() {
   const { api, setApi, originalApi } = useContext(AppContext);
   const history = useHistory();
   const location = useLocation();
@@ -51,7 +51,7 @@ export default function Itens() {
   return (
     <>
       <div>
-        { categories ? categories.map((category, i) => (
+        { categories?.map((category, i) => (
           <button
             key={ i }
             data-testid={ `${category}-category-filter` }
@@ -59,7 +59,7 @@ export default function Itens() {
           >
             {category}
           </button>
-        )) : null }
+        )) }
         <button
           data-testid="All-category-filter"
           onClick={ () => setApi(originalApi) }

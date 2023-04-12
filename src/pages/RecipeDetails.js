@@ -91,20 +91,15 @@ function RecipeDetails(props) {
   });
 
   useEffect(() => {
-    console.log(details);
     if (details.length > 0) {
       const data = details[0];
-      console.log(data);
       const allIngredients = Object.entries(data)
         .filter((e) => e[0].includes('strIngredient') && e[1])
         .map((e) => e[1]);
-      console.log(allIngredients);
       const measures = Object.entries(data)
         .filter((e) => e[0].includes('strMeasure') && e[1])
         .map((e) => e[1]);
-      console.log(measures);
       const results = allIngredients.map((e, i) => `${e} ${measures[i]}`);
-      console.log(results);
       setIngredients(results);
     }
   }, [details]);
@@ -140,7 +135,6 @@ function RecipeDetails(props) {
       setInProgressRecipe(true);
     }
   }, [id, pathname]);
-  console.log(details);
   return (
     <div>
       <h1>Detalhes da receita</h1>

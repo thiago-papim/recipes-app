@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import Itens from '../components/Itens';
+import Recipes from '../components/Recipes';
 import AppContext from '../context/AppContext';
 import { apiSearch } from '../services/API_SEARCH';
 
@@ -21,7 +21,7 @@ function Drinks() {
   return (
     <div>
       <Header />
-      <Itens />
+      <Recipes />
       <Footer />
     </div>
   );

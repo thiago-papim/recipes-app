@@ -32,13 +32,10 @@ export default function FavoriteButton({ idRecipe, recipe }) {
   };
 
   useEffect(() => {
-    console.log(recipe);
-    console.log(idRecipe);
     const storageFavorite = JSON.parse(localStorage.getItem('favoriteRecipes'));
     const favorite = storageFavorite ? storageFavorite.some((e) => e
       .id === idRecipe) : false;
     setIconFavorite(favorite);
-    console.log(favorite);
   }, [idRecipe, recipe]);
 
   return (
