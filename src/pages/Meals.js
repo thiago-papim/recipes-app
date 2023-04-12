@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from 'react';
-import Itens from '../components/Itens';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import { apiSearch } from '../services/API_SEARCH';
 import AppContext from '../context/AppContext';
+import Recipes from '../components/Recipes';
 
 export default function Meals() {
   const { setApi, setOriginalApi } = useContext(AppContext);
@@ -21,7 +21,7 @@ export default function Meals() {
   return (
     <>
       <Header />
-      <Itens />
+      <Recipes />
       <Footer />
     </>
   );

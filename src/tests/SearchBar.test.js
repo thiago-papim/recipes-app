@@ -1,52 +1,116 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router-dom';
+import { act } from 'react-dom/test-utils';
 import renderWithRouter from './renderWithRouter';
-import AppProvider from '../context/AppProvider';
-import Routes from '../pages/Routes';
+import App from '../App';
 
 describe('Testando o SearchBar', () => {
-  jest.setTimeout(10000);
-  it('Testando o retorno da pesquisa em Meals', async () => {
-    const alertMock = jest.spyOn(window, 'alert').mockImplementation();
-    renderWithRouter(
-      <AppProvider>
-        <BrowserRouter>
-          <Routes />
-        </BrowserRouter>
-      </AppProvider>,
-    );
-    const emailInput = screen.getByTestId(/email-input/i);
-    const passwordInput = screen.getByTestId(/password-input/i);
-    const loginSubmitButton = screen.getByTestId(/login-submit-btn/i);
-    userEvent.type(emailInput, 'emailInvalido');
-    userEvent.type(passwordInput, '000');
-    userEvent.type(emailInput, 'teste@teste.com');
-    userEvent.type(passwordInput, '123456789');
-    userEvent.click(loginSubmitButton);
-    const searchButton = screen.getByAltText('searchBtn');
-    userEvent.click(searchButton);
-    const inputSearch = screen.getByPlaceholderText('Pesquise sua receita...');
+  const alertMock = jest.spyOn(window, 'alert').mockImplementation();
+  beforeEach(() => {
+    const { history } = renderWithRouter(<App />);
+    act(() => {
+      history.push('/meals');
+    });
+  });
+  it('Testando Radio first letter', () => {
+    const btnSearch = screen.getByAltText(/searchbtn/i);
+    userEvent.click(btnSearch);
     const radioFirstLetter = screen.getByRole('radio', { name: /first letter/i });
-    const radioName = screen.getByRole('radio', { name: /name/i });
-    const radioIngredient = screen.getByRole('radio', { name: /ingredient/i });
     userEvent.click(radioFirstLetter);
-    expect(radioFirstLetter.checked).toBe(true);
-    userEvent.type(inputSearch, ('ab'));
-    const btnSubmit = screen.getByText(/search/i);
-    userEvent.click(btnSubmit);
+    expect(radioFirstLetter).toBeChecked();
+
+    const inputSearch = screen.getByRole('textbox');
+    userEvent.type(inputSearch, 'ae');
+
+    const submitSearch = screen.getByText(/search/i);
+    userEvent.click(submitSearch);
     expect(alertMock).toHaveBeenCalledWith('Your search must have only 1 (one) character');
-    userEvent.click(radioFirstLetter);
-    expect(radioFirstLetter.checked).toBe(true);
-    userEvent.type(inputSearch, ('a'));
-    expect(btnSubmit).toBeInTheDocument();
-    userEvent.click(btnSubmit);
-    userEvent.click(radioIngredient);
-    userEvent.type(inputSearch, 'salt');
-    userEvent.click(btnSubmit);
+
+    userEvent.type(inputSearch, 'z');
+    userEvent.click(submitSearch);
+    expect(alertMock).toHaveBeenCalledWith('Sorry, we haven\'t found any recipes for these filters.');
+  });
+  it('TEstando redirecionamento caso venha uma unica receita', async () => {
+    const btnSearch = screen.getByAltText(/searchbtn/i);
+    userEvent.click(btnSearch);
+    const radioName = screen.getByRole('radio', { name: /name/i });
     userEvent.click(radioName);
-    userEvent.type(inputSearch, ('Apple Frangipan Tart'));
-    userEvent.click(btnSubmit);
+    expect(radioName).toBeChecked();
+
+    const inputSearch = screen.getByRole('textbox');
+    userEvent.type(inputSearch, 'corba');
+
+    const submitSearch = screen.getByText(/search/i);
+    userEvent.click(submitSearch);
+
+    const ingredient = await screen.findByText('Lentils 1 cup');
+    expect(ingredient).toBeInTheDocument();
+    screen.logTestingPlaygroundURL();
+  });
+  it('Testando se retorna 4 receitas', async () => {
+    const btnSearch = screen.getByAltText(/searchbtn/i);
+    userEvent.click(btnSearch);
+    const radioFirstLetter = screen.getByRole('radio', { name: /first letter/i });
+    userEvent.click(radioFirstLetter);
+    const inputSearch = screen.getByRole('textbox');
+    userEvent.type(inputSearch, 'a');
+    const submitSearch = screen.getByText(/search/i);
+    userEvent.click(submitSearch);
+
+    const itemApple = await screen.findByText(/apple frangipan tart/i);
+    expect(itemApple).toBeInTheDocument();
+  });
+  it('Testando radio ingredient', async () => {
+    const btnSearch = screen.getByAltText(/searchbtn/i);
+    userEvent.click(btnSearch);
+    const radioIngredient = screen.getByRole('radio', { name: /ingredient/i });
+    userEvent.click(radioIngredient);
+    const inputSearch = screen.getByRole('textbox');
+    userEvent.type(inputSearch, 'chicken');
+    const submitSearch = screen.getByText(/search/i);
+    userEvent.click(submitSearch);
+
+    const itemChicken = await screen.findByText(/brown stew chicken/i);
+    expect(itemChicken).toBeInTheDocument();
+  });
+});
+
+describe('Testando o SearchBar em drinks', () => {
+  beforeEach(() => {
+    const { history } = renderWithRouter(<App />);
+    act(() => {
+      history.push('/drinks');
+    });
+  });
+  it('Testando radio ingredient', async () => {
+    const btnSearch = screen.getByAltText(/searchbtn/i);
+    userEvent.click(btnSearch);
+    const radioIngredient = screen.getByRole('radio', { name: /ingredient/i });
+    userEvent.click(radioIngredient);
+    const inputSearch = screen.getByRole('textbox');
+    userEvent.type(inputSearch, 'gin');
+    const submitSearch = screen.getByText(/search/i);
+    userEvent.click(submitSearch);
+
+    const itemChicken = await screen.findByText(/69 special/i);
+    expect(itemChicken).toBeInTheDocument();
+  });
+  it('TEstando redirecionamento caso venha uma unica receita', async () => {
+    const btnSearch = screen.getByAltText(/searchbtn/i);
+    userEvent.click(btnSearch);
+    const radioName = screen.getByRole('radio', { name: /name/i });
+    userEvent.click(radioName);
+    expect(radioName).toBeChecked();
+
+    const inputSearch = screen.getByRole('textbox');
+    userEvent.type(inputSearch, '69 special');
+
+    const submitSearch = screen.getByText(/search/i);
+    userEvent.click(submitSearch);
+
+    const ingredient = await screen.findByText(/Alcoholic/);
+    expect(ingredient).toBeInTheDocument();
+    screen.logTestingPlaygroundURL();
   });
 });
