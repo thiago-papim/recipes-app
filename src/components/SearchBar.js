@@ -36,9 +36,8 @@ export default function SearchBar() {
   };
 
   const getApi = async () => {
-    const pageName = pathname.includes('drinks');
-    const validationApi = pageName ? 'thecocktaildb' : 'themealdb';
-    console.log(validationApi);
+    const pageName = pathname.includes('meals');
+    const validationApi = pageName ? 'themealdb' : 'thecocktaildb';
     let recipeArr = [];
     if (inputRadio === 'First letter' && inputSearch.length > 1) {
       global.alert('Your search must have only 1 (one) character');

@@ -5,7 +5,6 @@ import { useLocation, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import clipboardCopy from 'clipboard-copy';
 import shareIcon from '../images/shareIcon.svg';
-// import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import FavoriteButton from '../components/FavoriteButton';
 
 function RecipeDetails(props) {
@@ -14,6 +13,7 @@ function RecipeDetails(props) {
   const [recomendations, setRecomendations] = useState([]);
   const [copied, setCopied] = useState(false);
   const [inProgressRecipe, setInProgressRecipe] = useState(false);
+  const [isThisRecipeDone, setIsThisRecipeDone] = useState(false);
   const history = useHistory();
   const { match: { params: { id } } } = props;
   const location = useLocation();
@@ -21,21 +21,10 @@ function RecipeDetails(props) {
   const urlAposDominio = pathname.split('/');
   const type = urlAposDominio[1];
 
-  /*   const shuffleArray = (array) => {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  };
-  console.log(shuffleArray()); */
-
   const getFood = async () => {
     const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
     const data = await response.json();
     return data.meals;
-    /*     console.log(data);
-    setDetails(data.meals); */
   };
 
   const getMealsRecomendations = async () => {
@@ -45,16 +34,12 @@ function RecipeDetails(props) {
     const recipes = data.meals;
     const slicedMeals = recipes.slice(0, magicNumber);
     return slicedMeals;
-    /*     setRecomendations(data.meals);
-    console.log(recomendations); */
   };
 
   const getDrink = async () => {
     const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
     const data = await response.json();
     return data.drinks;
-    /*     console.log('entrei');
-    setDetails(data.drinks); */
   };
 
   const getDrinksRecomendations = async () => {
@@ -64,8 +49,6 @@ function RecipeDetails(props) {
     const recipes = data.drinks;
     const slicedDrinks = recipes.slice(0, magicNumber);
     return slicedDrinks;
-    /*     setRecomendations(data.drinks);
-     console.log(recomendations); */
   };
 
   const teste = () => {
@@ -88,7 +71,7 @@ function RecipeDetails(props) {
 
   useEffect(() => {
     teste();
-  });
+  }, []);
 
   useEffect(() => {
     if (details.length > 0) {
@@ -135,6 +118,16 @@ function RecipeDetails(props) {
       setInProgressRecipe(true);
     }
   }, [id, pathname]);
+
+  useEffect(() => {
+    const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+    if (doneRecipes) {
+      doneRecipes.forEach((doneRecipe) => {
+        if (doneRecipe.id === id) setIsThisRecipeDone(true);
+      });
+    }
+  }, [id]);
+
   return (
     <div>
       <h1>Detalhes da receita</h1>
@@ -156,9 +149,6 @@ function RecipeDetails(props) {
             <img src={ shareIcon } alt="Compartilhar" />
           </button>
           {copied && <p>Link copied!</p>}
-          {/* <button data-testid="favorite-btn">
-            <img src={ whiteHeartIcon } alt="Botão de favoritar" />
-          </button> */}
           { details ? <FavoriteButton idRecipe={ id } recipe={ details } /> : ''}
           <h3 data-testid="recipe-category">
             { type === 'meals' ? details[0].strCategory : details[0].strAlcoholic }
@@ -222,14 +212,16 @@ function RecipeDetails(props) {
         </Carousel>
       </div>
       <div>
-        <button
-          className="startButton"
-          type="button"
-          data-testid="start-recipe-btn"
-          onClick={ handleClick }
-        >
-          { inProgressRecipe ? 'Continue Recipe' : 'Start Recipe' }
-        </button>
+        { !isThisRecipeDone && (
+          <button
+            className="startButton"
+            type="button"
+            data-testid="start-recipe-btn"
+            onClick={ handleClick }
+          >
+            { inProgressRecipe ? 'Continue Recipe' : 'Start Recipe' }
+          </button>
+        )}
       </div>
     </div>
   );
