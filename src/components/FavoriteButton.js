@@ -18,7 +18,6 @@ export default function FavoriteButton({ idRecipe, recipe }) {
       name: recipe[0].strDrink || recipe[0].strMeal,
       image: recipe[0].strDrinkThumb || recipe[0].strMealThumb,
     };
-    console.log(objRecipe);
     if (!favoritesStorage) {
       localStorage.setItem('favoriteRecipes', JSON.stringify([objRecipe]));
     } else if (!iconFavorite) {
@@ -32,13 +31,10 @@ export default function FavoriteButton({ idRecipe, recipe }) {
   };
 
   useEffect(() => {
-    console.log(recipe);
-    console.log(idRecipe);
     const storageFavorite = JSON.parse(localStorage.getItem('favoriteRecipes'));
     const favorite = storageFavorite ? storageFavorite.some((e) => e
       .id === idRecipe) : false;
     setIconFavorite(favorite);
-    console.log(favorite);
   }, [idRecipe, recipe]);
 
   return (
