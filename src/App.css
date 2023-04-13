@@ -10,6 +10,21 @@
   width: 100%;
 }
 
+.doneRecipeImg {
+  max-width: 300px;
+}
+
+.startButton {
+  bottom: 0;
+  margin-top: 30px;
+  padding: 30px;
+  position: fixed;
+}
+
+.carousel {
+  max-width: 300px;
+}
+
 .rocksGlass {
   animation: shake 1s infinite ease;
   max-height: 80vh;
