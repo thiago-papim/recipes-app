@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { apiSearch } from '../services/API_SEARCH';
 import FavoriteButton from '../components/FavoriteButton';
+import AppContext from '../context/AppContext';
+import Carregando from '../images/Carregando....png';
 
 const copy = require('clipboard-copy');
 
 function RecipeInProgress() {
+  const { setLoad, load } = useContext(AppContext);
   const history = useHistory();
   const [checkboxes, setCheckboxes] = useState({});
   const [copied, setCopied] = useState(true);
@@ -15,6 +18,7 @@ function RecipeInProgress() {
   const [btnFinish, setBtnFinish] = useState(true);
 
   useEffect(() => {
+    setLoad(true);
     if (localStorage.getItem('inProgressRecipes') === null) {
       localStorage.setItem('inProgressRecipes', JSON
         .stringify({ drinks: {}, meals: {} }));
@@ -29,15 +33,17 @@ function RecipeInProgress() {
       if (name) {
         const response = await apiSearch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
         setRecipe(response.meals[0]);
+        setLoad(false);
       } else {
         const response = await apiSearch(
           `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`,
         );
         setRecipe(response.drinks[0]);
+        setLoad(false);
       }
     };
     fetchApi();
-  }, [history]);
+  }, [history, setLoad]);
 
   const data = Object.entries(recipe);
 
@@ -123,65 +129,72 @@ function RecipeInProgress() {
   };
 
   return (
-    <>
-      <img
-        data-testid="recipe-photo"
-        src={ recipe.strMealThumb || recipe.strDrinkThumb }
-        alt={ recipe.strMeal || recipe.strDrink }
-      />
-      <h2 data-testid="recipe-title">{recipe.strMeal || recipe.strDrink}</h2>
-      <button
-        data-testid="share-btn"
-        onClick={ () => {
-          const magicNumber = -12;
-          copy(window.location.href.slice(0, magicNumber));
-          setCopied(false);
-        } }
-      >
-        Compartilhar
-      </button>
-      { idRecipe ? <FavoriteButton idRecipe={ idRecipe } recipe={ [recipe] } /> : ''}
-      { copied || <p>Link copied!</p> }
-      <p data-testid="recipe-category">{recipe.strCategory}</p>
-      {ingredients.length > 0 && ingredients.map((string, index) => {
-        const type = recipe.idMeal ? 'meals' : 'drinks';
-        const id = idRecipe;
-        const storage = JSON.parse(localStorage.getItem('inProgressRecipes'));
-        const validation = storage[type][id] ? checkboxes[type][id]
-          ?.some((e) => e === string) : false;
-        return (
-          <div
-            key={ string }
-          >
-            <label
-              data-testid={ `${index}-ingredient-step` }
-              htmlFor="step"
-              style={ validation
-                ? { textDecoration: 'line-through solid rgb(0, 0, 0)' }
-                : { textDecoration: 'none' } }
+    <div>
+      { load ? <img src={ Carregando } alt="Carregando" />
+        : (
+          <div>
+
+            <img
+              data-testid="recipe-photo"
+              src={ recipe.strMealThumb || recipe.strDrinkThumb }
+              alt={ recipe.strMeal || recipe.strDrink }
+            />
+            <h2 data-testid="recipe-title">{recipe.strMeal || recipe.strDrink}</h2>
+            <button
+              data-testid="share-btn"
+              onClick={ () => {
+                const magicNumber = -12;
+                copy(window.location.href.slice(0, magicNumber));
+                setCopied(false);
+              } }
             >
-              <input
-                label="step"
-                type="checkbox"
-                // defaultChecked={ checkboxes[index + 1] }
-                checked={ validation }
-                onChange={ (e) => handleClick(string, e) }
-              />
-              {`${string} ${measures[index] || ''}`}
-            </label>
-            <br />
+              Compartilhar
+            </button>
+            { idRecipe
+              ? <FavoriteButton idRecipe={ idRecipe } recipe={ [recipe] } /> : ''}
+            { copied || <p>Link copied!</p> }
+            <p data-testid="recipe-category">{recipe.strCategory}</p>
+            {ingredients.length > 0 && ingredients.map((string, index) => {
+              const type = recipe.idMeal ? 'meals' : 'drinks';
+              const id = idRecipe;
+              const storage = JSON.parse(localStorage.getItem('inProgressRecipes'));
+              const validation = storage[type][id] ? checkboxes[type][id]
+                ?.some((e) => e === string) : false;
+              return (
+                <div
+                  key={ string }
+                >
+                  <label
+                    data-testid={ `${index}-ingredient-step` }
+                    htmlFor="step"
+                    style={ validation
+                      ? { textDecoration: 'line-through solid rgb(0, 0, 0)' }
+                      : { textDecoration: 'none' } }
+                  >
+                    <input
+                      label="step"
+                      type="checkbox"
+                      // defaultChecked={ checkboxes[index + 1] }
+                      checked={ validation }
+                      onChange={ (e) => handleClick(string, e) }
+                    />
+                    {`${string} ${measures[index] || ''}`}
+                  </label>
+                  <br />
+                </div>
+              );
+            })}
+            <p data-testid="instructions">{recipe.strInstructions}</p>
+            <button
+              data-testid="finish-recipe-btn"
+              disabled={ btnFinish }
+              onClick={ finish }
+            >
+              Finalizar Receita
+            </button>
           </div>
-        );
-      })}
-      <p data-testid="instructions">{recipe.strInstructions}</p>
-      <button
-        data-testid="finish-recipe-btn"
-        disabled={ btnFinish }
-        onClick={ finish }
-      >
-        Finalizar Receita
-      </button>
-    </>
+        )}
+    </div>
   );
 }
 

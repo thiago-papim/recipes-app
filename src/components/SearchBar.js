@@ -4,7 +4,7 @@ import AppContext from '../context/AppContext';
 import { apiSearch } from '../services/API_SEARCH';
 
 export default function SearchBar() {
-  const { setApi } = useContext(AppContext);
+  const { setApi, setLoad } = useContext(AppContext);
   const history = useHistory();
   const location = useLocation();
   const { pathname } = location;
@@ -36,6 +36,7 @@ export default function SearchBar() {
   };
 
   const getApi = async () => {
+    setLoad(true);
     const pageName = pathname.includes('meals');
     const validationApi = pageName ? 'themealdb' : 'thecocktaildb';
     let recipeArr = [];
@@ -43,10 +44,13 @@ export default function SearchBar() {
       global.alert('Your search must have only 1 (one) character');
     } else if (inputRadio === 'First letter' && inputSearch.length === 1) {
       recipeArr = await apiSearch(`https://www.${validationApi}.com/api/json/v1/1/search.php?f=${inputSearch}`);
+      setLoad(false);
     } else if (inputRadio === 'Name') {
       recipeArr = await apiSearch(`https://www.${validationApi}.com/api/json/v1/1/search.php?s=${inputSearch}`);
+      setLoad(false);
     } else {
       recipeArr = await apiSearch(`https://www.${validationApi}.com/api/json/v1/1/filter.php?i=${inputSearch}`);
+      setLoad(false);
     }
     recipeApi(recipeArr);
   };
