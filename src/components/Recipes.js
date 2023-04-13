@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-
 import AppContext from '../context/AppContext';
 import { apiSearch } from '../services/API_SEARCH';
 import './styles/itens.css';
@@ -49,8 +48,11 @@ export default function Recipes() {
   };
 
   return (
-    <>
-      <div>
+    <div>
+      <div
+        className="flex flex-row justify-between items-center
+      w-full border-2"
+      >
         { categories?.map((category, i) => (
           <button
             key={ i }
@@ -91,6 +93,6 @@ export default function Recipes() {
           </button>
         )) : null }
       </div>
-    </>
+    </div>
   );
 }
