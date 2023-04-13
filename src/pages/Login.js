@@ -63,10 +63,13 @@ function Login() {
             data-testid="password-input"
             minLength="6"
             onChange={ inputPasswordChange }
-            className="bg-gray-100 border border-gray-200 rounded-md p-2 text-gray-800 w-64"
+            className="bg-gray-100 border
+            border-gray-200 rounded-md p-2 text-gray-800 w-64"
           />
           <button
-            className="bg-blue-500 hover:bg-blue-700 focus:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:bg-gray-400 disabled:cursor-not-allowed "
+            className="bg-blue-500 hover:bg-blue-700
+            focus:bg-blue-700 text-white font-bold
+            py-2 px-4 rounded disabled:bg-gray-400 disabled:cursor-not-allowed "
             data-testid="login-submit-btn"
             type="submit"
             disabled={ btnDisabled }

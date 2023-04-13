@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-
 import AppContext from '../context/AppContext';
 import { apiSearch } from '../services/API_SEARCH';
 import { MealsFilter } from '../images/ButtonsFilter/MealsFilter';

@@ -5,6 +5,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import AppProvider from './context/AppProvider';
+import '@fortawesome/fontawesome-svg-core/styles.css';
 
 ReactDOM
   .createRoot(document.getElementById('root'))

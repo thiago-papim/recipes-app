@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUtensils } from '@fortawesome/free-solid-svg-icons';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 import SearchBar from './SearchBar';
+import logo3 from '../images/logo3.png';
 
 export default function Header() {
   const history = useHistory();
@@ -21,8 +23,13 @@ export default function Header() {
   }, [pathname]);
 
   return (
-    <div>
-      <div>
+    <div className="flex flex-row justify-between items-center w-ful bg-tertiary">
+      <img src={ logo3 } alt="Logo" className="w-40" />
+      <div className="flex items-center justify-between my-3">
+        <h2 data-testid="page-title" className="text-quinary">{ title }</h2>
+        <FontAwesomeIcon icon={ faUtensils } />
+      </div>
+      <div className="flex flex-row items-center space-x-4">
         {
           btnSearch
         || (
@@ -33,6 +40,7 @@ export default function Header() {
               data-testid="search-top-btn"
               src={ searchIcon }
               alt="searchBtn"
+              className="w-18"
             />
           </button>
         )
@@ -46,9 +54,6 @@ export default function Header() {
             alt="perfilBtn"
           />
         </button>
-      </div>
-      <div>
-        <h2 data-testid="page-title">{ title }</h2>
       </div>
       { btnOn && <SearchBar /> }
     </div>
