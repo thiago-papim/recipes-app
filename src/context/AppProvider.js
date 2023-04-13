@@ -6,13 +6,16 @@ import AppContext from './AppContext';
 function AppProvider({ children }) {
   const [api, setApi] = useState('');
   const [originalApi, setOriginalApi] = useState('');
+  const [load, setLoad] = useState(true);
 
   const values = useMemo(() => ({
     api,
     setApi,
     originalApi,
     setOriginalApi,
-  }), [api, originalApi]);
+    load,
+    setLoad,
+  }), [api, originalApi, load]);
 
   return (
     <AppContext.Provider value={ values }>
