@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React, { useContext, useEffect, useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import '../App.css';
@@ -145,131 +146,142 @@ function RecipeDetails(props) {
       { load ? <img src={ Carregando } alt="carregando" /> : (
         <div>
           <div
-            className="flex flex-row justify-center items-center w-ful bg-tertiary"
+            className="flex justify-between items-center w-ful h-24 bg-tertiary"
           >
-            <div className="flex items-center justify-between my-3">
-              <img src={ logo3 } alt="Logo" className="w-40 left-0" />
-              <h1 className="text-quinary">Detalhes da receita</h1>
-            </div>
+            <img src={ logo3 } alt="Logo" className="w-40 left-0 ml-4" />
+            <h1 className="text-quinary mr-8">Detalhes da receita</h1>
           </div>
           { details.length > 0 && (
             <div className="z-0">
-              <section className="justify-around flex">
-                <div className="flex p-4">
+              <section className="flex w-full">
+                <div className="flex-col p-4">
                   <img
-                    className="w-full h-[50vh] bg-cover
+                    className="bg-cover
                     rounded-lg border-gray-300 shadow-sm"
                     data-testid="recipe-photo"
                     src={ details[0]?.strMealThumb || details[0]?.strDrinkThumb }
                     alt="Foto da receita"
-                    // style={ { width: '300px' } }
                   />
-                </div>
-                <div className="flex flex-row p-4">
-                  <div className="p-4 space-y-4 flex items-center flex-col card">
-                    <h2 className="font-bold" data-testid="recipe-title">
-                      { details[0]?.strMeal || details[0]?.strDrink }
-                    </h2>
-                    <div className="flex flex-row p-4 space-x-5">
-                      <button
-                        data-testid="share-btn"
-                        onClick={ copyLink }
-                      >
-                        <img src={ shareIcon } alt="Compartilhar"/>
-                      </button>
-                      {copied && <p>Link copied!</p>}
-                      { details ? <FavoriteButton
-                        idRecipe={ id }
-                        recipe={ details }
-                      /> : ''}
-                    </div>
-                    <h3 data-testid="recipe-category">
-                      { type === 'meals' ? details[0].strCategory
-                        : details[0].strAlcoholic }
-                    </h3>
-                  </div>
-                  <div
-                    className="space-y-2 flex
-                  flex-col text-center items-center justify-center card"
-                  >
-                    <h3 className="font-bold">Ingredientes</h3>
-                    {
-                      ingredients && (
-
-                        <ul className="container">
-                          {
-                            ingredients.map((e, index) => (
-
-                              <li
-                                key={ index }
-                                data-testid={ `${index}-ingredient-name-and-measure` }
-                              >
-                                {e}
-
-                              </li>
-                            ))
-                          }
-                        </ul>
-
-                      )
-                    }
-                  </div>
-                </div>
-                <div className="flex">
-                  { !isThisRecipeDone && (
+                  <h2 className="font-bold text-center" data-testid="recipe-title">
+                    { details[0]?.strMeal || details[0]?.strDrink }
+                  </h2>
+                  <h5 data-testid="recipe-category" className="text-center">
+                    { type === 'meals' ? details[0].strCategory
+                      : details[0].strAlcoholic }
+                  </h5>
+                  <div className="flex justify-around items-center w-ful">
                     <button
-                      className="bg-quinary text-tertiary rounded-full w-20 h-20 my-4"
-                      type="button"
-                      data-testid="start-recipe-btn"
-                      onClick={ handleClick }
+                      data-testid="share-btn"
+                      onClick={ copyLink }
                     >
-                      { inProgressRecipe ? 'Continue Recipe' : 'Start Recipe' }
+                      <img
+                        src={ shareIcon }
+                        alt="Compartilhar"
+                      />
                     </button>
-                  )}
+                    {copied && <p>Link copied!</p>}
+                    { details ? <FavoriteButton
+                      idRecipe={ id }
+                      recipe={ details }
+                    /> : ''}
+                  </div>
+                </div>
+                <div className="flex p-4">
+                  <div>
+                    <div
+                      className="border-2 px-10 py-2"
+                    >
+                      <h3 className="font-bold">Ingredientes</h3>
+                      {
+                        ingredients && (
+                          <div>
+
+                            <ul className="container">
+                              {
+                                ingredients.map((e, index) => (
+
+                                  <li
+                                    key={ index }
+                                    data-testid={ `${index}-ingredient-name-and-measure` }
+                                  >
+                                    {e}
+
+                                  </li>
+                                ))
+                              }
+                            </ul>
+                          </div>
+
+                        )
+                      }
+                    </div>
+                    { !isThisRecipeDone && (
+                      <div className="p-2 mx-4">
+                        <button
+                          className="p-2 bg-quinary rounded-lg hover:bg-quaternary mx-4"
+                          type="button"
+                          data-testid="start-recipe-btn"
+                          onClick={ handleClick }
+                        >
+                          { inProgressRecipe ? 'Continue Recipe' : 'Start Recipe' }
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </section>
-              <h3 className="font-bold">Modo de preparo</h3>
-              <p data-testid="instructions">
+              <h3 className="font-bold text-center border-t-4 p-4">Modo de preparo</h3>
+              <p data-testid="instructions" className="text-justify px-2">
                 { details[0]?.strInstructions }
               </p>
-              {
-                type === 'meals'
-           && (<iframe
-             data-testid="video"
-             src={ getLink(details[0]?.strYoutube) }
-             width="420px"
-             height="315px"
-             title={ `${details[0]?.strMeal}` }
-           />)
-              }
+              <div
+                className="flex"
+              >
+                {
+                  type === 'meals'
+                && (
+                <div>
+                  <h2 className="font-bold text-center">Receita em vídeo</h2>
+                  <iframe
+                    data-testid="video"
+                    src={ getLink(details[0]?.strYoutube) }
+                    width="420px"
+                    height="315px"
+                    title={ `${details[0]?.strMeal}` }
+                  />
+                </div>
+                )
+                }
+                <div
+                  className="carousel flex-col w-96 justify-center"
+                >
+                  <h2 className="font-bold text-center">Recomendações</h2>
+                  <Carousel>
+                    {
+                      recomendations.map((recipe, i) => (
+                        <Carousel.Item
+                          key={ i }
+                          data-testid={ `${i}-recommendation-card` }
+                        >
+                          <img
+                            className="d-block w-100"
+                            src={ recipe.strMealThumb || recipe.strDrinkThumb }
+                            alt="Foto da receita"
+                          />
+                          <h2
+                            className="text-center"
+                            data-testid={ `${i}-recommendation-title` }
+                          >
+                            {recipe.strMeal || recipe.strDrink}
+                          </h2>
+                        </Carousel.Item>
+                      ))
+                    }
+                  </Carousel>
+                </div>
+              </div>
             </div>
           )}
-          <div
-            className="carousel my-2"
-          >
-            <h2 className="font-bold">Recomendações</h2>
-            <Carousel>
-              {
-                recomendations.map((recipe, i) => (
-                  <Carousel.Item
-                    key={ i }
-                    data-testid={ `${i}-recommendation-card` }
-                  >
-                    <img
-                      className="d-block w-100"
-                      src={ recipe.strMealThumb || recipe.strDrinkThumb }
-                      alt="Foto da receita"
-                    />
-                    <h2
-                      data-testid={ `${i}-recommendation-title` }
-                    >
-                      {recipe.strMeal || recipe.strDrink}
-                    </h2>
-                  </Carousel.Item>
-                ))
-              }
-            </Carousel>
-          </div>
         </div>
       )}
     </div>

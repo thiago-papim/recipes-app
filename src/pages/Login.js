@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-// import AppContext from '../context/AppContext';
+import logo3 from '../images/logo3.png';
 
 function Login() {
   const history = useHistory();
@@ -31,9 +31,14 @@ function Login() {
   };
 
   return (
-    <div className="flex text-center justify-center h-screen items-center bg-cover bg-[url('https://i.ibb.co/jTtzLyX/composicao-plana-leiga-de-macarrao-com-copyspace.jpg')]">
+    <div className="flex flex-col bg-gradient-to-b from-secundary to-quinary flex text-center h-screen items-center bg-cover bg-[url('https://i.ibb.co/jTtzLyX/composicao-plana-leiga-de-macarrao-com-copyspace.jpg')]">
+      <img
+        className="w-64"
+        src={ logo3 }
+        alt="logo"
+      />
       <form
-        className="border-2 p-10 rounded-lg bg-white opacity-70 "
+        className="border-2 p-10 rounded-lg opacity-90 "
         onSubmit={ (e) => {
           e.preventDefault();
           history.push('/meals');
@@ -67,9 +72,8 @@ function Login() {
             border-gray-200 rounded-md p-2 text-gray-800 w-64"
           />
           <button
-            className="bg-blue-500 hover:bg-blue-700
-            focus:bg-blue-700 text-white font-bold
-            py-2 px-4 rounded disabled:bg-gray-400 disabled:cursor-not-allowed "
+            className="p-2 rounded-lg text-white enabled:bg-secundary mx-4 pb
+            disabled:bg-primary"
             data-testid="login-submit-btn"
             type="submit"
             disabled={ btnDisabled }

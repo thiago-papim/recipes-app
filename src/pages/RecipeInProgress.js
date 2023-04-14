@@ -5,6 +5,8 @@ import { apiSearch } from '../services/API_SEARCH';
 import FavoriteButton from '../components/FavoriteButton';
 import AppContext from '../context/AppContext';
 import Carregando from '../images/Carregando....png';
+import logo3 from '../images/logo3.png';
+import shareIcon from '../images/shareIcon.svg';
 
 const copy = require('clipboard-copy');
 
@@ -132,66 +134,99 @@ function RecipeInProgress() {
     <div>
       { load ? <img src={ Carregando } alt="Carregando" />
         : (
-          <div>
-
-            <img
-              data-testid="recipe-photo"
-              src={ recipe.strMealThumb || recipe.strDrinkThumb }
-              alt={ recipe.strMeal || recipe.strDrink }
-            />
-            <h2 data-testid="recipe-title">{recipe.strMeal || recipe.strDrink}</h2>
-            <button
-              data-testid="share-btn"
-              onClick={ () => {
-                const magicNumber = -12;
-                copy(window.location.href.slice(0, magicNumber));
-                setCopied(false);
-              } }
+          <div
+            className="flex-col pb-3"
+          >
+            <div
+              className="flex justify-between items-center w-ful h-24 bg-tertiary"
             >
-              Compartilhar
-            </button>
-            { idRecipe
-              ? <FavoriteButton idRecipe={ idRecipe } recipe={ [recipe] } /> : ''}
-            { copied || <p>Link copied!</p> }
-            <p data-testid="recipe-category">{recipe.strCategory}</p>
-            {ingredients.length > 0 && ingredients.map((string, index) => {
-              const type = recipe.idMeal ? 'meals' : 'drinks';
-              const id = idRecipe;
-              const storage = JSON.parse(localStorage.getItem('inProgressRecipes'));
-              const validation = storage[type][id] ? checkboxes[type][id]
-                ?.some((e) => e === string) : false;
-              return (
-                <div
-                  key={ string }
+              <img src={ logo3 } alt="Logo" className="w-40 left-0 ml-4" />
+              <h1 className="text-quinary mr-8">Receita em Progresso</h1>
+            </div>
+            <div
+              className="flex flex-col items-center"
+            >
+              <img
+                className="max-w-md pt-4"
+                data-testid="recipe-photo"
+                src={ recipe.strMealThumb || recipe.strDrinkThumb }
+                alt={ recipe.strMeal || recipe.strDrink }
+              />
+              <h2
+                className="pt-2 m-0"
+                data-testid="recipe-title"
+              >
+                {recipe.strMeal || recipe.strDrink}
+              </h2>
+              <p data-testid="recipe-category">{recipe.strCategory}</p>
+              <div>
+                <button
+                  className="mr-4"
+                  data-testid="share-btn"
+                  onClick={ () => {
+                    const magicNumber = -12;
+                    copy(window.location.href.slice(0, magicNumber));
+                    setCopied(false);
+                  } }
                 >
-                  <label
-                    data-testid={ `${index}-ingredient-step` }
-                    htmlFor="step"
-                    style={ validation
-                      ? { textDecoration: 'line-through solid rgb(0, 0, 0)' }
-                      : { textDecoration: 'none' } }
+                  <img
+                  // className="mx-2"
+                    src={ shareIcon }
+                    alt="Compartilhar"
+                  />
+                </button>
+                { idRecipe
+                  ? <FavoriteButton idRecipe={ idRecipe } recipe={ [recipe] } /> : ''}
+              </div>
+              { copied || <p>Link copied!</p> }
+              {ingredients.length > 0 && ingredients.map((string, index) => {
+                const type = recipe.idMeal ? 'meals' : 'drinks';
+                const id = idRecipe;
+                const storage = JSON.parse(localStorage.getItem('inProgressRecipes'));
+                const validation = storage[type][id] ? checkboxes[type][id]
+                  ?.some((e) => e === string) : false;
+                return (
+                  <div
+                    key={ string }
+                    className="flex ml-48 w-96"
                   >
-                    <input
-                      label="step"
-                      type="checkbox"
-                      // defaultChecked={ checkboxes[index + 1] }
-                      checked={ validation }
-                      onChange={ (e) => handleClick(string, e) }
-                    />
-                    {`${string} ${measures[index] || ''}`}
-                  </label>
-                  <br />
-                </div>
-              );
-            })}
-            <p data-testid="instructions">{recipe.strInstructions}</p>
-            <button
-              data-testid="finish-recipe-btn"
-              disabled={ btnFinish }
-              onClick={ finish }
-            >
-              Finalizar Receita
-            </button>
+                    <label
+                      data-testid={ `${index}-ingredient-step` }
+                      htmlFor="step"
+                      style={ validation
+                        ? { textDecoration: 'line-through solid rgb(0, 0, 0)' }
+                        : { textDecoration: 'none' } }
+                    >
+                      <input
+                        label="step"
+                        type="checkbox"
+                        // defaultChecked={ checkboxes[index + 1] }
+                        checked={ validation }
+                        onChange={ (e) => handleClick(string, e) }
+                      />
+                      {`${string} ${measures[index] || ''}`}
+                    </label>
+                    <br />
+                  </div>
+                );
+              })}
+              <p
+                className="pt-7 px-2 text-justify border-t-2"
+                data-testid="instructions"
+              >
+                {recipe.strInstructions}
+
+              </p>
+              <button
+                className="p-2 rounded-lg text-white enabled:bg-secundary mx-4 pb
+                disabled:bg-primary"
+                data-testid="finish-recipe-btn"
+                disabled={ btnFinish }
+                onClick={ finish }
+              >
+                Finalizar Receita
+              </button>
+            </div>
           </div>
         )}
     </div>

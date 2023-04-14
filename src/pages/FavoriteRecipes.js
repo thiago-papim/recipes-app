@@ -82,27 +82,34 @@ function FavoriteRecipes() {
   return (
     <div>
       <Header />
-      <button
-        data-testid="filter-by-all-btn"
-        onClick={ () => resetFilter(recipes) }
+      <div
+        className="flex justify-center mt-6"
       >
-        All
-      </button>
-      <button
-        data-testid="filter-by-meal-btn"
-        onClick={ () => filterByMeal(recipes) }
-      >
-        Meals
-      </button>
-      <button
-        data-testid="filter-by-drink-btn"
-        onClick={ () => filterByDrink(recipes) }
-      >
-        Drinks
-      </button>
+        <button
+          className="p-2 bg-quinary rounded-lg hover:bg-quaternary mx-2 w-20"
+          data-testid="filter-by-all-btn"
+          onClick={ () => resetFilter(recipes) }
+        >
+          All
+        </button>
+        <button
+          className="p-2 bg-quinary rounded-lg hover:bg-quaternary mx-2 w-20"
+          data-testid="filter-by-meal-btn"
+          onClick={ () => filterByMeal(recipes) }
+        >
+          Meals
+        </button>
+        <button
+          className="p-2 bg-quinary rounded-lg hover:bg-quaternary mx-2 w-20"
+          data-testid="filter-by-drink-btn"
+          onClick={ () => filterByDrink(recipes) }
+        >
+          Drinks
+        </button>
+      </div>
 
       {filteredRecipes ? filteredRecipes.map((recipe, index) => (
-        <div key={ recipe.name }>
+        <div key={ recipe.name } className="flex flex-col items-center text-center pt-4">
           <button onClick={ () => toDetails(recipe.type, recipe.id) }>
             <img
               data-testid={ `${index}-horizontal-image` }
@@ -110,6 +117,11 @@ function FavoriteRecipes() {
               width="300"
               alt={ recipe.name }
             />
+            <h2
+              data-testid={ `${index}-horizontal-name` }
+            >
+              {recipe.name}
+            </h2>
           </button>
           <p
             data-testid={ `${index}-horizontal-top-text` }
@@ -118,32 +130,28 @@ function FavoriteRecipes() {
               ? `${recipe.nationality} - ${recipe.category}`
               : `${recipe.alcoholicOrNot}`}
           </p>
-          <button onClick={ () => toDetails(recipe.type, recipe.id) }>
-            <h2
-              data-testid={ `${index}-horizontal-name` }
+          <div>
+            <button
+              className="mr-5"
+              onClick={ () => copyLink(recipe.id, recipe.type, index) }
             >
-              {recipe.name}
-            </h2>
-          </button>
-          <button
-            onClick={ () => copyLink(recipe.id, recipe.type, index) }
-          >
-            <img
-              data-testid={ `${index}-horizontal-share-btn` }
-              src={ shareIcon }
-              alt="share-icon"
-            />
-          </button>
+              <img
+                data-testid={ `${index}-horizontal-share-btn` }
+                src={ shareIcon }
+                alt="share-icon"
+              />
+            </button>
+            <button
+              onClick={ () => removeFavorite(recipe.name) }
+            >
+              <img
+                data-testid={ `${index}-horizontal-favorite-btn` }
+                src={ blackHeartIcon }
+                alt="black-heart-icon"
+              />
+            </button>
+          </div>
           {copied[index] && <p>Link copied!</p>}
-          <button
-            onClick={ () => removeFavorite(recipe.name) }
-          >
-            <img
-              data-testid={ `${index}-horizontal-favorite-btn` }
-              src={ blackHeartIcon }
-              alt="black-heart-icon"
-            />
-          </button>
         </div>
       )) : <p />}
 
