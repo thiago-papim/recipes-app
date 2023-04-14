@@ -63,7 +63,6 @@ function RecipeDetails(props) {
     setLoad(false);
     return slicedDrinks;
   };
-
   const teste = () => {
     if (type === 'meals') {
       getFood().then((data) => {
