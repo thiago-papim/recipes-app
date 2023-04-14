@@ -166,8 +166,8 @@ function RecipeDetails(props) {
                   />
                 </div>
                 <div className="flex flex-row p-4">
-                  <div className="p-4 space-y-4 flex items-center flex-col">
-                    <h2 data-testid="recipe-title">
+                  <div className="p-4 space-y-4 flex items-center flex-col card">
+                    <h2 className="font-bold" data-testid="recipe-title">
                       { details[0]?.strMeal || details[0]?.strDrink }
                     </h2>
                     <div className="flex flex-row p-4 space-x-5">
@@ -190,9 +190,9 @@ function RecipeDetails(props) {
                   </div>
                   <div
                     className="space-y-2 flex
-                  flex-col text-center items-center justify-center"
+                  flex-col text-center items-center justify-center card"
                   >
-                    <h3>Ingredientes</h3>
+                    <h3 className="font-bold">Ingredientes</h3>
                     {
                       ingredients && (
 
@@ -228,7 +228,7 @@ function RecipeDetails(props) {
                   )}
                 </div>
               </section>
-              <h3>Modo de preparo</h3>
+              <h3 className="font-bold">Modo de preparo</h3>
               <p data-testid="instructions">
                 { details[0]?.strInstructions }
               </p>
@@ -247,7 +247,7 @@ function RecipeDetails(props) {
           <div
             className="carousel my-2"
           >
-            <h2>Recomendações</h2>
+            <h2 className="font-bold">Recomendações</h2>
             <Carousel>
               {
                 recomendations.map((recipe, i) => (
