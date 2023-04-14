@@ -8,6 +8,7 @@ import shareIcon from '../images/shareIcon.svg';
 import FavoriteButton from '../components/FavoriteButton';
 import AppContext from '../context/AppContext';
 import Carregando from '../images/Carregando....png';
+import logo3 from '../images/logo3.png';
 
 function RecipeDetails(props) {
   const { setLoad, load } = useContext(AppContext);
@@ -143,47 +144,91 @@ function RecipeDetails(props) {
     <div>
       { load ? <img src={ Carregando } alt="carregando" /> : (
         <div>
-          <h1>Detalhes da receita</h1>
+          <div
+            className="flex flex-row justify-center items-center w-ful bg-tertiary"
+          >
+            <div className="flex items-center justify-between my-3">
+              <img src={ logo3 } alt="Logo" className="w-40 left-0" />
+              <h1 className="text-quinary">Detalhes da receita</h1>
+            </div>
+          </div>
           { details.length > 0 && (
-            <div>
-              <img
-                data-testid="recipe-photo"
-                src={ details[0]?.strMealThumb || details[0]?.strDrinkThumb }
-                alt="Foto da receita"
-                style={ { width: '400px' } }
-              />
-              <h2 data-testid="recipe-title">
-                { details[0]?.strMeal || details[0]?.strDrink }
-              </h2>
-              <button
-                data-testid="share-btn"
-                onClick={ copyLink }
-              >
-                <img src={ shareIcon } alt="Compartilhar" />
-              </button>
-              {copied && <p>Link copied!</p>}
-              { details ? <FavoriteButton idRecipe={ id } recipe={ details } /> : ''}
-              <h3 data-testid="recipe-category">
-                { type === 'meals' ? details[0].strCategory : details[0].strAlcoholic }
-              </h3>
-              <h3>Ingredientes</h3>
-              {
-                ingredients && (
-                  <ul>
+            <div className="z-0">
+              <section className="justify-around flex">
+                <div className="flex p-4">
+                  <img
+                    className="w-full h-[50vh] bg-cover
+                    rounded-lg border-gray-300 shadow-sm"
+                    data-testid="recipe-photo"
+                    src={ details[0]?.strMealThumb || details[0]?.strDrinkThumb }
+                    alt="Foto da receita"
+                    // style={ { width: '300px' } }
+                  />
+                </div>
+                <div className="flex flex-row p-4">
+                  <div className="p-4 space-y-4 flex items-center flex-col">
+                    <h2 data-testid="recipe-title">
+                      { details[0]?.strMeal || details[0]?.strDrink }
+                    </h2>
+                    <div className="flex flex-row p-4 space-x-5">
+                      <button
+                        data-testid="share-btn"
+                        onClick={ copyLink }
+                      >
+                        <img src={ shareIcon } alt="Compartilhar" />
+                      </button>
+                      {copied && <p>Link copied!</p>}
+                      { details ? <FavoriteButton
+                        idRecipe={ id }
+                        recipe={ details }
+                      /> : ''}
+                    </div>
+                    <h3 data-testid="recipe-category">
+                      { type === 'meals' ? details[0].strCategory
+                        : details[0].strAlcoholic }
+                    </h3>
+                  </div>
+                  <div
+                    className="space-y-2 flex
+                  flex-col text-center items-center justify-center"
+                  >
+                    <h3>Ingredientes</h3>
                     {
-                      ingredients.map((e, index) => (
+                      ingredients && (
 
-                        <li
-                          key={ index }
-                          data-testid={ `${index}-ingredient-name-and-measure` }
-                        >
-                          {e}
+                        <ul className="container">
+                          {
+                            ingredients.map((e, index) => (
 
-                        </li>
-                      ))
+                              <li
+                                key={ index }
+                                data-testid={ `${index}-ingredient-name-and-measure` }
+                              >
+                                {e}
+
+                              </li>
+                            ))
+                          }
+                        </ul>
+
+                      )
                     }
-                  </ul>)
-              }
+                  </div>
+                </div>
+                <div className="flex">
+                  { !isThisRecipeDone && (
+                    <button
+                      className="bg-quinary text-tertiary rounded-full w-20 h-20 my-4"
+                      type="button"
+                      data-testid="start-recipe-btn"
+                      onClick={ handleClick }
+                    >
+                      { inProgressRecipe ? 'Continue Recipe' : 'Start Recipe' }
+                    </button>
+                  )}
+                </div>
+              </section>
+              <h3>Modo de preparo</h3>
               <p data-testid="instructions">
                 { details[0]?.strInstructions }
               </p>
@@ -200,8 +245,9 @@ function RecipeDetails(props) {
             </div>
           )}
           <div
-            className="carousel"
+            className="carousel my-2"
           >
+            <h2>Recomendações</h2>
             <Carousel>
               {
                 recomendations.map((recipe, i) => (
@@ -223,18 +269,6 @@ function RecipeDetails(props) {
                 ))
               }
             </Carousel>
-          </div>
-          <div>
-            { !isThisRecipeDone && (
-              <button
-                className="startButton"
-                type="button"
-                data-testid="start-recipe-btn"
-                onClick={ handleClick }
-              >
-                { inProgressRecipe ? 'Continue Recipe' : 'Start Recipe' }
-              </button>
-            )}
           </div>
         </div>
       )}
