@@ -18,7 +18,7 @@ export default function SearchBar() {
     const pageName = pathname.includes('meals');
     const validationApi = pageName ? 'meals' : 'drinks';
     const result = localApi[validationApi]?.slice(0, magicNumber);
-    setApi(result);
+    if (result) setApi(result);
   }, [localApi, setApi, btnSearch, pathname]);
 
   const recipeApi = (recipeArr) => {
@@ -69,58 +69,69 @@ export default function SearchBar() {
   };
 
   return (
-    <form>
-      <div>
+    <form
+      className="flex-colum text-center justify-center
+     bg-tertiary border-t-4 border-quinary"
+    >
+      <div className="flex">
         <input
-          placeholder="Pesquise sua receita..."
+          className="h-12 mx-6 text-center mt-2 rounded shadow-md w-100
+          border focus:ring-2 focus:ring-secundary focus:outline-none"
+          placeholder="Pesquise sua receita"
           type="text"
           data-testid="search-input"
           onChange={ handleChange }
         />
       </div>
-      <div>
-        <label htmlFor="ingredient">
-          Ingredient
-          <input
-            name="radioSearch"
-            id="ingredient"
-            type="radio"
-            data-testid="ingredient-search-radio"
-            value="Ingredient"
-            onClick={ handleChange }
-          />
-        </label>
-        <label htmlFor="name">
-          Name
-          <input
-            name="radioSearch"
-            id="name"
-            type="radio"
-            data-testid="name-search-radio"
-            value="Name"
-            onClick={ handleChange }
-          />
-        </label>
-        <label htmlFor="firstLetter">
-          First letter
-          <input
-            name="radioSearch"
-            id="firstLetter"
-            type="radio"
-            data-testid="first-letter-search-radio"
-            value="First letter"
-            onClick={ handleChange }
-          />
-        </label>
-      </div>
-      <div>
-        <button
-          type="button"
-          data-testid="exec-search-btn"
-          onClick={ handleClick }
-        >
-          Search
-        </button>
+      <div className="flex-colum p-2 mx-6">
+        <div className="mt-3">
+          <label htmlFor="ingredient" className="mx-3 text-white">
+            <input
+              className="mx-1"
+              name="radioSearch"
+              id="ingredient"
+              type="radio"
+              data-testid="ingredient-search-radio"
+              value="Ingredient"
+              onClick={ handleChange }
+            />
+            Ingredient
+          </label>
+          <label htmlFor="name" className="mx-3 text-white">
+            <input
+              className="mx-1"
+              name="radioSearch"
+              id="name"
+              type="radio"
+              data-testid="name-search-radio"
+              value="Name"
+              onClick={ handleChange }
+            />
+            Name
+          </label>
+          <label htmlFor="firstLetter" className="mx-3 text-white">
+            <input
+              className="mx-1"
+              name="radioSearch"
+              id="firstLetter"
+              type="radio"
+              data-testid="first-letter-search-radio"
+              value="First letter"
+              onClick={ handleChange }
+            />
+            First letter
+          </label>
+        </div>
+        <div>
+          <button
+            className=" p-2 bg-quinary rounded-lg w- w-80"
+            type="button"
+            data-testid="exec-search-btn"
+            onClick={ handleClick }
+          >
+            Search
+          </button>
+        </div>
       </div>
     </form>
   );

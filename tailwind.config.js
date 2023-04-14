@@ -17,7 +17,6 @@ module.exports = {
         quaternary: { DEFAULT: '#FFB703' },
         quinary: { DEFAULT: '#FB8500' },
       },
-
     },
   },
   plugins: [],

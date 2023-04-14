@@ -36,12 +36,8 @@ export default function Recipes() {
   }, [setApi, pathname, setLoad]);
 
   const categoryFilter = async (category) => {
-    console.log('oi');
     if (category === '' || category !== categoriesFilter) {
-      console.log(categoriesFilter);
       setCategoriesFilter(category);
-      console.log(api);
-      console.log(originalApi);
       setLoad(true);
       const magicNumber = 12;
       const pageName = pathname.includes('meals');
@@ -52,7 +48,6 @@ export default function Recipes() {
       const result = response[validationApi[1]].slice(0, magicNumber);
       setLoad(false);
       setApi(result);
-      console.log(categoriesFilter);
     } else {
       setCategoriesFilter('');
       setApi(originalApi);
@@ -66,9 +61,17 @@ export default function Recipes() {
   };
 
   return (
-    <div>
+    <div className="mt-2">
       { load
-        ? <img src={ Carregando } alt="load" />
+        ? (
+          <div className="flex w-100 text-center">
+            <img
+              className="h-96 mx-auto"
+              src={ Carregando }
+              alt="load"
+            />
+          </div>
+        )
         : (
           <div>
             <div className="flex justify-center">
@@ -100,7 +103,10 @@ export default function Recipes() {
                   className="border-quinary rounded-full mx-2 w-20 p-2
                 border-4 bg-tertiary"
                   data-testid="All-category-filter"
-                  onClick={ () => setApi(originalApi) }
+                  onClick={ () => {
+                    setCategoriesFilter('');
+                    setApi(originalApi);
+                  } }
                 >
                   <img
                     className="w-20"
@@ -116,7 +122,8 @@ export default function Recipes() {
             >
               { api ? api.map((recipe, i) => (
                 <button
-                  className="mx-2 mb-4 rounded-md shadow-md hover:shadow-2xl"
+                  className="mx-2 mb-4 rounded-md shadow-md
+                  hover:shadow-2xl w-48"
                   key={ recipe.strMeal || recipe.strDrink }
                   data-testid={ `${i}-recipe-card` }
                   onClick={ () => teste(recipe) }
@@ -127,7 +134,10 @@ export default function Recipes() {
                     src={ recipe.strMealThumb || recipe.strDrinkThumb }
                     alt={ recipe.strMeal || recipe.strDrink }
                   />
-                  <h4 data-testid={ `${i}-card-name` }>
+                  <h4
+                    data-testid={ `${i}-card-name` }
+                    className="h-16 flex justify-center"
+                  >
                     { recipe.strMeal || recipe
                       .strDrink }
                   </h4>
