@@ -175,7 +175,7 @@ function RecipeDetails(props) {
                         data-testid="share-btn"
                         onClick={ copyLink }
                       >
-                        <img src={ shareIcon } alt="Compartilhar" />
+                        <img src={ shareIcon } alt="Compartilhar"/>
                       </button>
                       {copied && <p>Link copied!</p>}
                       { details ? <FavoriteButton
